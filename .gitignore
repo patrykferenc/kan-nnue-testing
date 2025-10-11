@@ -205,3 +205,12 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# pytorch
+logs/
+testing
+libtraining_data_loader.*
+easy_train_data
+*.yaml
+# workspace
+mystuff/
