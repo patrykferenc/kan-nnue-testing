@@ -1,0 +1,10 @@
+{
+  "engine_path": "/path/to/stockfish",
+  "net_path": "/path/to/nn-epoch.nnue",
+  "data_path": "/path/to/data.binpack",
+  "checkpoint_path": "/path/to/checkpoint.ckpt",
+  "model_name": "sfnnv9",
+  "count": 10000,
+  "batch_size": 1000,
+  "output_dir": "./results"
+}

@@ -1,6 +1,6 @@
-import sfnnv9.model as SFNNv9
-import sfnnvkan_g2_k2_3072_15_32_mlp.model as SFNNvkan_g2_k2_3072_15_32_mlp
-import sfnnvkan_g3_k3_3072_15_32_mlp.model as SFNNvkan_g3_k3_3072_15_32_mlp
+from .sfnnv9 import model as SFNNv9
+from .sfnnvkan_g2_k2_3072_15_32_mlp import model as SFNNvkan_g2_k2_3072_15_32_mlp
+from .sfnnvkan_g3_k3_3072_15_32_mlp import model as SFNNvkan_g3_k3_3072_15_32_mlp
 
 nets = {
     'sfnnv9': lambda feature_set: SFNNv9.NNUE(feature_set),

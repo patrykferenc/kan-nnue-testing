@@ -1,7 +1,7 @@
 import chess
 import torch
 from collections import OrderedDict
-from feature_block import *
+from .feature_block import *
 
 NUM_SQ = 64
 NUM_PT = 12

@@ -5,7 +5,7 @@ import os
 import sys
 import glob
 from torch.utils.data import Dataset
-from dataloader_skip_config import DataloaderSkipConfig, CDataloaderSkipConfig
+from .dataloader_skip_config import DataloaderSkipConfig, CDataloaderSkipConfig
 
 local_dllpath = [
     n

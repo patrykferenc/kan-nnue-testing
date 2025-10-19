@@ -214,3 +214,12 @@ easy_train_data
 *.yaml
 # workspace
 mystuff/
+
+# Personal config files (keep config.template.json in git)
+config.json
+
+# Results directory
+results/
+*.csv
+*_summary.json
+*_evals.csv

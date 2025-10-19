@@ -1,8 +1,8 @@
-import ranger21
+from commons import ranger21
 import torch
 from torch import nn
 import pytorch_lightning as pl
-from feature_transformer import DoubleFeatureTransformerSlice
+from commons.feature_transformer import DoubleFeatureTransformerSlice
 from dataclasses import dataclass
 from kan import KAN
 

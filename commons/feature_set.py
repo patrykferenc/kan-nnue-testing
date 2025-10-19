@@ -1,4 +1,4 @@
-import feature_block
+from . import feature_block
 import torch
 
 

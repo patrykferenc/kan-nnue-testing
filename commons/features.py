@@ -1,4 +1,4 @@
-import feature_set
+from . import feature_set
 
 import argparse
 
@@ -8,10 +8,10 @@ added to the _feature_modules list. Each such module must define a
 function `get_feature_block_clss` at module scope that returns the list
 of feature block classes in that module.
 """
-import halfkp
-import halfka
-import halfka_v2
-import halfka_v2_hm
+from . import halfkp
+from . import halfka
+from . import halfka_v2
+from . import halfka_v2_hm
 
 _feature_modules = [halfkp, halfka, halfka_v2, halfka_v2_hm]
 
