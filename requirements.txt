@@ -14,3 +14,5 @@ seaborn
 # cupy
 torch
 scipy
+tqdm
+chess==1.9.4
