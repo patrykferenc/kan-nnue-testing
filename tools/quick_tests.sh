@@ -7,7 +7,8 @@ T="python3 $TOOLS/tester.py"
 
 echo "Mate in 1..."
 #$T "$1" ${2:-"--quiet"} mate $TOOLS/test_files/mate1.fen --depth 2
-$T "$1" ${2:-"--quiet"} mate $TOOLS/test_files/mate1.fen --movetime 20000
+#$T "$1" ${2:-"--quiet"} mate $TOOLS/test_files/mate1.fen --movetime 20000
+$T "$1" ${2:-"--debug"} mate $TOOLS/test_files/mate1.fen --movetime 20000
 echo
 
 # Stockfish finds this at around depth 14 with normal search, but faster

@@ -283,14 +283,17 @@ def from_fen(board, color, castling, enpas, _hclock, _fclock):
     wc = ("Q" in castling, "K" in castling)
     bc = ("k" in castling, "q" in castling)
     ep = sunfish.parse(enpas) if enpas != "-" else 0
-    if hasattr(sunfish, 'features'):
+
+    pos_fields = sunfish.Position._fields
+    if 'wf' in pos_fields and 'bf' in pos_fields:
+        # Old NNUE version with features
         wf, bf = sunfish.features(board)
         pos = sunfish.Position(board, 0, wf, bf, wc, bc, ep, 0)
         pos = pos._replace(score=pos.compute_value())
     else:
-        score = sum(sunfish.pst[c][i] for i, c in enumerate(board) if c.isupper())
-        score -= sum(sunfish.pst[c.upper()][119-i] for i, c in enumerate(board) if c.islower())
-        pos = sunfish.Position(board, score, wc, bc, ep, 0)
+        pos = sunfish.Position(board, 0, wc, bc, ep, 0)
+        pos = pos._replace(score=pos.compute_value())
+
     return pos if color == 'w' else pos.rotate()
 
 
