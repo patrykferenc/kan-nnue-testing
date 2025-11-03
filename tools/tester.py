@@ -1,20 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import os
 import re
-import sys
 import time
-import subprocess
-import signal
 import argparse
-import importlib
-import itertools
 import random
-import warnings
 import chess
 import chess.engine
-import pathlib
 import tqdm
 import asyncio
 import collections
