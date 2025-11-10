@@ -245,7 +245,7 @@ class Mate(Command):
     async def run(cls, engine, args):
         limit = get_limit(args)
         total = 0
-        success = 1
+        success = 0
         lines = args.file.readlines()
         lines = lines[: args.limit]
         pb = tqdm.tqdm(lines)
