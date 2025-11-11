@@ -18,6 +18,12 @@ logging.basicConfig(
     format="%(asctime)s %(levelname)s %(message)s",
 )
 
+import warnings
+
+# Filter specific KAN statistics warnings that occur during inference
+warnings.filterwarnings('ignore', message='std\\(\\): degrees of freedom is <= 0')
+warnings.filterwarnings('ignore', category=UserWarning, module='kan.MultKAN')
+
 version = 'sunfish nnue'
 
 ###############################################################################
@@ -735,7 +741,12 @@ if '--profile' in sys.argv:
 else:
     import tools.uci
 
-    tools.uci.run(sys.modules[__name__], hist[-1])
+    book_path = sys.argv[5] if len(sys.argv) > 5 else None
+
+    if book_path:
+        logging.info(f"Using book at {book_path}")
+
+    tools.uci.run(sys.modules[__name__], hist[-1], book_path=book_path)
 sys.exit()
 # minifier-hide end
 

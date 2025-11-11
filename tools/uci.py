@@ -4,6 +4,7 @@ import re, time
 from concurrent.futures import ThreadPoolExecutor
 from threading import Event
 from functools import partial
+import chess.polyglot
 
 print = partial(print, flush=True)
 
@@ -150,13 +151,25 @@ def perft(pos, depth, debug=False):
     print("Nodes searched:", total)
 
 
-def run(sunfish_module, startpos):
+def run(sunfish_module, startpos, book_path=None):
     global sunfish
     sunfish = sunfish_module
+
+    # Load opening book if provided
+    opening_book = None
+    if book_path:
+        try:
+            opening_book = chess.polyglot.open_reader(book_path)
+            logging.info(f"Loaded opening book: {book_path}")
+        except Exception as e:
+            logging.warning(f"Failed to load opening book: {e}")
 
     debug = False
     hist = [startpos]
     searcher = sunfish.Searcher()
+
+    # Track position as chess.Board for book lookups
+    chess_board = chess.Board()
 
     with ThreadPoolExecutor(max_workers=1) as executor:
         # Noop future to get started
@@ -179,6 +192,8 @@ def run(sunfish_module, startpos):
                         if debug:
                             print("Go loop not running...")
                     if args[0] == "quit":
+                        if opening_book:
+                            opening_book.close()
                         break
 
                 elif not go_future.done():
@@ -212,18 +227,38 @@ def run(sunfish_module, startpos):
 
                 elif args[:2] == ["position", "startpos"]:
                     hist = [startpos]
+                    chess_board = chess.Board()  # Reset to starting position
                     for ply, move in enumerate(args[3:]):
                         hist.append(hist[-1].move(parse_move(move, ply % 2 == 0)))
+                        chess_board.push_uci(move)  # Update chess.Board
 
                 elif args[:2] == ["position", "fen"]:
                     pos = from_fen(*args[2:8])
                     hist = [pos] if get_color(pos) == WHITE else [pos.rotate(), pos]
+                    chess_board = chess.Board(" ".join(args[2:8]))  # Create from FEN
                     if len(args) > 8:
                         assert args[8] == "moves"
                         for move in args[9:]:
                             hist.append(hist[-1].move(parse_move(move, len(hist) % 2 == 1)))
+                            chess_board.push_uci(move)
 
                 elif args[0] == "go":
+                    # Try opening book first (only in opening phase)
+                    if opening_book and chess_board.fullmove_number <= 12:
+                        try:
+                            entry = opening_book.weighted_choice(chess_board)
+                            if entry:
+                                book_move = entry.move.uci()
+                                print(f"info string Book move")
+                                print(f"bestmove {book_move}")
+                                continue
+                        except IndexError:
+                            # Position not in book, proceed with search
+                            pass
+                        except Exception as e:
+                            logging.warning(f"Book probe error: {e}")
+
+                    # Normal search if no book move
                     think = 10 ** 6
                     max_depth = 100
                     loop = go_loop
@@ -258,13 +293,7 @@ def run(sunfish_module, startpos):
 
                     do_stop_event.clear()
                     go_future = executor.submit(
-                        loop,
-                        searcher,
-                        hist,
-                        do_stop_event,
-                        think,
-                        max_depth,
-                        debug=debug,
+                        loop, searcher, hist, do_stop_event, think, max_depth, debug=debug
                     )
 
                     # Make sure we get informed if the job fails
@@ -279,6 +308,8 @@ def run(sunfish_module, startpos):
                         print("Stopping go loop...")
                     do_stop_event.set()
                     go_future.result()
+                if opening_book:
+                    opening_book.close()
                 break
 
 
@@ -333,10 +364,10 @@ def pv(searcher, pos, include_scores=True, include_loop=False):
         move = None
         if hasattr(pos, "wf"):
             move = searcher.tp_move.get(pos.hash())
-            #logging.info(f"tp_move is {move} for pos.hash()={pos.hash()} and tp_move={searcher.tp_move}")
+            # logging.info(f"tp_move is {move} for pos.hash()={pos.hash()} and tp_move={searcher.tp_move}")
         elif hasattr(searcher, "tp_move"):
             move = searcher.tp_move.get(pos.hash())
-            #logging.info(f"tp_move is {move} for pos={pos} and tp_move={searcher.tp_move}")
+            # logging.info(f"tp_move is {move} for pos={pos} and tp_move={searcher.tp_move}")
         elif hasattr(searcher, "tt_new"):
             move = searcher.tt_new[0][pos, True].move
         # The tp may have illegal moves, given lower depths don't detect king killing
