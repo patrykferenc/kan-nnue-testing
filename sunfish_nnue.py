@@ -3,20 +3,20 @@
 import models
 import sys, time
 from itertools import count
-from collections import namedtuple
+from collections import namedtuple, OrderedDict
 import torch
-from functools import partial
+from functools import partial, lru_cache
 
 print = partial(print, flush=True)
 
+# LOGS
 import logging
 
-# LOGS
-# logging.basicconfig(
-#     filename="test.log",
-#     level=logging.info,
-#     format="%(asctime)s %(levelname)s %(message)s",
-# s)
+logging.basicConfig(
+    filename="test.log",
+    level=logging.INFO,
+    format="%(asctime)s %(levelname)s %(message)s",
+)
 
 version = 'sunfish nnue'
 
@@ -30,19 +30,86 @@ from commons import nnue_dataset
 # python sunfish_nnue.py <model_name:sfnnv9> <model_path.ckpt:/my/model/path/model.ckpt>
 model_name = sys.argv[1]
 model_path = sys.argv[2]
+BATCH_SIZE = int(sys.argv[3]) if len(sys.argv) > 3 else 1
+COMPILE_MODE = sys.argv[4] if len(sys.argv) > 4 else "default"
 
+torch.set_float32_matmul_precision('high')
+torch.set_grad_enabled(False)
 feature_set = features.get_feature_set_from_name("HalfKAv2_hm^")
 model = models.nets[model_name](feature_set)
 checkpoint = torch.load(model_path, map_location='cuda')
 model.load_state_dict(checkpoint['state_dict'])
 model.eval()
 model.cuda()
-
-# Set up idx_offset (for batch size 1)
 model.layer_stacks.idx_offset = torch.arange(
-    0, model.layer_stacks.count, model.layer_stacks.count, device='cuda'
+    0, BATCH_SIZE * model.layer_stacks.count, model.layer_stacks.count, device='cuda'
 )
+# TODO: fix compilation? or remove
+# Warmup: Run a few forward passes to initialize CUBLAS before CUDA graph recording
+logging.info(f"Warming up model with batch_size={BATCH_SIZE}...")
+warmup_fens = ["rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"] * BATCH_SIZE
+warmup_outcomes = [0] * BATCH_SIZE
+warmup_scores = [1] * BATCH_SIZE
+warmup_plies = [0] * BATCH_SIZE
 
+for _ in range(3):  # Multiple warmup iterations
+    warmup_batch = nnue_dataset.make_sparse_batch_from_fens(
+        feature_set, warmup_fens, warmup_outcomes, warmup_scores, warmup_plies
+    )
+    warmup_tensors = warmup_batch.contents.get_tensors('cuda')
+    with torch.no_grad():
+        _ = model.forward(
+            warmup_tensors[0], warmup_tensors[1], warmup_tensors[2],
+            warmup_tensors[3], warmup_tensors[4], warmup_tensors[5],
+            warmup_tensors[8], warmup_tensors[9]
+        )
+    nnue_dataset.destroy_sparse_batch(warmup_batch)
+    torch.cuda.synchronize()
+
+# Warmup: Run a few forward passes to initialize CUBLAS before CUDA graph recording
+logging.info(f"Warming up model with batch_size={BATCH_SIZE}, compile_mode={COMPILE_MODE}...")
+warmup_fens = ["rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"] * BATCH_SIZE
+warmup_outcomes = [0] * BATCH_SIZE
+warmup_scores = [1] * BATCH_SIZE
+warmup_plies = [0] * BATCH_SIZE
+
+for _ in range(3):  # Multiple warmup iterations
+    warmup_batch = nnue_dataset.make_sparse_batch_from_fens(
+        feature_set, warmup_fens, warmup_outcomes, warmup_scores, warmup_plies
+    )
+    warmup_tensors = warmup_batch.contents.get_tensors('cuda')
+    with torch.no_grad():
+        _ = model.forward(
+            warmup_tensors[0], warmup_tensors[1], warmup_tensors[2],
+            warmup_tensors[3], warmup_tensors[4], warmup_tensors[5],
+            warmup_tensors[8], warmup_tensors[9]
+        )
+    nnue_dataset.destroy_sparse_batch(warmup_batch)
+    torch.cuda.synchronize()
+
+print(f"Warmup complete. Compiling model with mode='{COMPILE_MODE}'...", flush=True)
+try:
+    model = torch.compile(model, mode=COMPILE_MODE)
+
+    # Run one more pass after compilation to trigger any graph recording
+    warmup_batch = nnue_dataset.make_sparse_batch_from_fens(
+        feature_set, warmup_fens, warmup_outcomes, warmup_scores, warmup_plies
+    )
+    warmup_tensors = warmup_batch.contents.get_tensors('cuda')
+    with torch.no_grad():
+        _ = model.forward(
+            warmup_tensors[0], warmup_tensors[1], warmup_tensors[2],
+            warmup_tensors[3], warmup_tensors[4], warmup_tensors[5],
+            warmup_tensors[8], warmup_tensors[9]
+        )
+    nnue_dataset.destroy_sparse_batch(warmup_batch)
+    torch.cuda.synchronize()
+    logging.info("Compilation complete.")
+    print("Model ready!", flush=True)
+except Exception as e:
+    logging.info(f"Warning: Compilation with {COMPILE_MODE} failed: {e}")
+    logging.info("Falling back to default mode...")
+    model = torch.compile(model, mode="default")
 # Mate value must be greater than 8*queen + 2*(rook+knight+bishop)
 # King value is set to twice this value such that if the opponent is
 # 8 queens up, but we got the king, we still exceed MATE_VALUE.
@@ -51,10 +118,127 @@ MATE_LOWER = MATE // 2
 MATE_UPPER = MATE * 3 // 2
 
 
+class EvaluationBatcher:
+    """Collects positions and evaluates them in batches with static batch size for CUDA graphs"""
+
+    def __init__(self, model, feature_set, batch_size):
+        self.model = model
+        self.feature_set = feature_set
+        self.batch_size = batch_size
+        self.pending_positions = []
+        self.pending_fens = []
+        self.results = {}
+
+        # Padding FEN for incomplete batches (standard starting position)
+        self.padding_fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+
+    def add_position(self, pos, cache_key):
+        """Add a position to the batch queue"""
+        if cache_key not in self.results:
+            fen = position_to_fen(pos)
+            self.pending_positions.append((pos, cache_key))
+            self.pending_fens.append(fen)
+
+            # Process batch if full
+            if len(self.pending_fens) >= self.batch_size:
+                self.process_batch()
+
+    def process_batch(self):
+        """Process all pending positions as a batch with padding to maintain static batch size"""
+        if not self.pending_fens:
+            return
+
+        num_real = len(self.pending_fens)
+
+        # Pad to full batch size with dummy positions
+        padded_fens = self.pending_fens.copy()
+        while len(padded_fens) < self.batch_size:
+            padded_fens.append(self.padding_fen)
+
+        # Create batch with static batch size
+        outcomes = [0] * self.batch_size
+        scores = [1] * self.batch_size
+        plies = [0] * self.batch_size
+
+        b = nnue_dataset.make_sparse_batch_from_fens(
+            self.feature_set, padded_fens, outcomes, scores, plies
+        )
+
+        # Get tensors
+        (us, them, white_indices, white_values, black_indices, black_values,
+         outcome, score, psqt_indices, layer_stack_indices) = b.contents.get_tensors('cuda')
+
+        # Evaluate batch (no idx_offset modification - it's set at startup!)
+        with torch.no_grad():
+            eval_tensors = self.model.forward(
+                us, them, white_indices, white_values, black_indices, black_values,
+                psqt_indices, layer_stack_indices
+            ) * 600.0
+
+        # Store results (only for real positions, not padding)
+        for i, (pos, cache_key) in enumerate(self.pending_positions):
+            eval_score = eval_tensors[i].item()
+
+            # Flip score if black to move
+            if them[i].item() > 0.5:
+                eval_score = -eval_score
+
+            self.results[cache_key] = int(eval_score)
+
+        # Clean up
+        nnue_dataset.destroy_sparse_batch(b)
+        self.pending_positions.clear()
+        self.pending_fens.clear()
+
+    def get_result(self, cache_key):
+        """Get evaluation result, processing batch if needed"""
+        if cache_key not in self.results:
+            self.process_batch()
+        return self.results.get(cache_key)
+
+    def clear(self):
+        """Clear all pending and cached results"""
+        self.pending_positions.clear()
+        self.pending_fens.clear()
+        self.results.clear()
+
+
+# Global batcher instance with static batch size
+eval_batcher = EvaluationBatcher(model, feature_set, batch_size=BATCH_SIZE)
+
+
+class LRUCache:
+    """Least Recently Used cache with size limit"""
+
+    def __init__(self, capacity=100000):
+        self.cache = OrderedDict()
+        self.capacity = capacity
+
+    def get(self, key):
+        if key in self.cache:
+            # Move to end (most recently used)
+            self.cache.move_to_end(key)
+            return self.cache[key]
+        return None
+
+    def put(self, key, value):
+        if key in self.cache:
+            self.cache.move_to_end(key)
+        self.cache[key] = value
+        if len(self.cache) > self.capacity:
+            # Remove least recently used
+            self.cache.popitem(last=False)
+
+
+# Global evaluation cache
+eval_cache = LRUCache(capacity=200000)
+
+
 ###############################################################################
 # Board to FEN conversion
 ###############################################################################
 
+@lru_cache(maxsize=10000)
 def position_to_fen(pos):
     """Convert Position to FEN string
 
@@ -182,8 +366,6 @@ class Position(namedtuple("Position", "board score wc bc ep kp")):
     # ep - the en passant square
     # kp - the king passant square
 
-    _eval_cache = {}
-
     def gen_moves(self):
         # For each of our pieces, iterate through each possible 'ray' of moves,
         # as defined in the 'directions' map. The rays are broken e.g. by
@@ -296,52 +478,32 @@ class Position(namedtuple("Position", "board score wc bc ep kp")):
         If a king is missing, return a mate score immediately.
         """
         cache_key = self.hash()
-        if cache_key in Position._eval_cache:
-            return Position._eval_cache[cache_key]
+        cached_value = eval_cache.get(cache_key)
+        if cached_value is not None:
+            return cached_value
 
         # Check if both kings are present
         has_our_king = 'K' in self.board
         has_their_king = 'k' in self.board
 
         if not has_our_king:
+            eval_cache.put(cache_key, -MATE_UPPER)
             return -MATE_UPPER
 
         if not has_their_king:
+            eval_cache.put(cache_key, MATE_UPPER)
             return MATE_UPPER
 
-        # Both kings present - safe to evaluate with NNUE
-        fen = position_to_fen(self)
+        # Add to batch for evaluation
+        eval_batcher.add_position(self, cache_key)
 
-        # Create sparse batch from FEN
-        b = nnue_dataset.make_sparse_batch_from_fens(
-            feature_set, [fen], [0], [1], [0]
-        )
+        # Get result (will process batch if needed)
+        eval_score = eval_batcher.get_result(cache_key)
 
-        # Get tensors
-        (us, them, white_indices, white_values, black_indices, black_values,
-         outcome, score, psqt_indices, layer_stack_indices) = b.contents.get_tensors('cuda')
+        # Store in LRU cache
+        eval_cache.put(cache_key, eval_score)
 
-        # Evaluate with model
-        with torch.no_grad():
-            eval_tensor = model.forward(
-                us, them, white_indices, white_values, black_indices, black_values,
-                psqt_indices, layer_stack_indices
-            ) * 600.0
-
-        eval_score = eval_tensor.item()
-
-        # Flip score if black to move (them > 0.5)
-        if them[0].item() > 0.5:
-            eval_score = -eval_score
-
-        # Clean up
-        nnue_dataset.destroy_sparse_batch(b)
-
-        # Store in cache
-        eval_score_int = int(eval_score)
-        Position._eval_cache[cache_key] = eval_score_int
-
-        return eval_score_int
+        return eval_score
 
     def hash(self):
         return hash((self.board, self.wc, self.bc, self.ep, self.kp))
@@ -360,6 +522,28 @@ class Searcher:
         self.tp_move = {}
         self.history = set()
         self.nodes = 0
+        # History heuristic for move ordering
+        self.history_scores = {}
+
+    def get_history_score(self, pos, move):
+        """Get history heuristic score for move ordering"""
+        if not move:
+            return 0
+        key = (pos.board[move.i], move.i, move.j)
+        return self.history_scores.get(key, 0)
+
+    def update_history_score(self, pos, move, depth):
+        """Update history heuristic when a move causes a cutoff"""
+        if not move:
+            return
+        key = (pos.board[move.i], move.i, move.j)
+        bonus = depth * depth  # Quadratic depth bonus
+        self.history_scores[key] = self.history_scores.get(key, 0) + bonus
+        # Prevent overflow
+        if self.history_scores[key] > 10000:
+            # Age all history scores
+            for k in self.history_scores:
+                self.history_scores[k] //= 2
 
     def bound(self, pos, gamma, depth, root=True):
         # returns r where
@@ -428,48 +612,48 @@ class Searcher:
             if killer and (depth > 0 or pos.is_capture(killer)):
                 yield killer, -self.bound(pos.move(killer), 1 - gamma, depth - 1, False)
 
-            def mvv_lva(move):
-                """MVV-LVA: Most Valuable Victim - Least Valuable Attacker
-                Returns negative score (lower = better for Python sort)
-                """
+            def move_score(move):
+                """Combined scoring for move ordering"""
                 piece_values = {'P': 100, 'N': 320, 'B': 330, 'R': 500, 'Q': 900, 'K': 20000}
 
-                # King captures (highest priority)
+                # Start with MVV-LVA for captures
                 if abs(move.j - pos.kp) < 2:
-                    return -MATE
+                    return -100000  # King capture highest priority
 
                 victim = pos.board[move.j]
-
-                # Calculate capture score
                 if victim != '.':
-                    # Regular capture: prioritize valuable victims, cheap attackers
                     attacker = pos.board[move.i]
-                    score = piece_values[victim.upper()] * 10 - piece_values[attacker.upper()]
+                    mvv_lva = piece_values[victim.upper()] * 10 - piece_values[attacker.upper()]
+                    return -10000 - mvv_lva  # Captures before quiet moves
                 elif move.j == pos.ep:
-                    # En passant (PxP: 1000 - 100 = 900)
-                    score = 900
+                    return -10900  # En passant
+                elif move.prom:
+                    return -5000 - piece_values[move.prom]  # Promotions
                 else:
-                    # Quiet move or promotion without capture
-                    score = 0
+                    # Quiet moves ordered by history heuristic
+                    return -self.get_history_score(pos, move)
 
-                # Promotion bonus (makes Q promotions better than minor promotions)
-                if move.prom:
-                    score += piece_values[move.prom]
+            # Generate and sort moves
+            all_moves = list(pos.gen_moves())
+            all_moves.sort(key=move_score)
 
-                return -score if score > 0 else 0
-
-            for move in sorted(pos.gen_moves(), key=mvv_lva):
+            for move in all_moves:
                 if depth > 0 or pos.is_capture(move):
                     yield move, -self.bound(pos.move(move), 1 - gamma, depth - 1, False)
 
         # Run through the moves, shortcutting when possible
         best = -MATE_UPPER
         for move, score in moves():
-            best = max(best, score)
+            if score > best:
+                best = score
             if best >= gamma:
-                # Save the move for pv construction and killer heuristic
+                # Save killer move and update history
+                # logging.info(f"will save move? {move is not None}")
                 if move is not None:
+                    # logging.info(f"saving move {move} with score {score}")
                     self.tp_move[pos.hash()] = move
+                    if depth > 0 and not pos.is_capture(move):
+                        self.update_history_score(pos, move, depth)
                 break
 
         # Stalemate checking
@@ -490,6 +674,7 @@ class Searcher:
         self.nodes = 0
         pos = history[-1]
         self.history = {pos.hash() for pos in history}
+        eval_batcher.clear()
         # Clearing table due to new history. This is because having a new "seen"
         # position alters the score of all other positions, as there may now be
         # a path that leads to a repetition.
@@ -499,6 +684,7 @@ class Searcher:
         gamma = 0
         # In finished games, we could potentially go far enough to cause a recursion
         # limit exception. Hence we bound the ply.
+        # logging.info(f"Starting search with len(history)={len(history)}, pos={pos}")
         for depth in range(1, 1000):
             # The inner loop is a binary search on the score of the position.
             # Inv: lower <= score <= upper
@@ -506,11 +692,13 @@ class Searcher:
             # better.
             lower, upper = -MATE_UPPER, MATE_UPPER
             while lower < upper - EVAL_ROUGHNESS:
+                # logging.info(f"starting bound at depth={depth}, lower={lower}, upper={upper}")
                 score = self.bound(pos, gamma, depth)
                 if score >= gamma:
                     lower = score
                 if score < gamma:
                     upper = score
+                # logging.info(f"finished bound at depth={depth}, lower={lower}, upper={upper}, score={score}, nodes(k)={self.nodes / 1000:.2f},got {self.tp_move.get(pos.hash())}")
                 yield depth, gamma, score, self.tp_move.get(pos.hash())
                 gamma = (lower + upper + 1) // 2
 
@@ -573,7 +761,6 @@ while True:
             hist.append(hist[-1].move(Move(i, j, prom)))
 
     elif args[0] == "go":
-        # logging.info(f"got args {args}")
         wtime, btime, winc, binc = [int(a) / 1000 for a in args[2::2]]
         if len(hist) % 2 == 0:
             wtime, winc = btime, binc
@@ -581,6 +768,8 @@ while True:
 
         start = time.time()
         move_str = None
+
+        # logging.info(f"Starting search at {start} for {think} seconds, curr pos: {hist[-1]}")
         for depth, gamma, score, move in Searcher().search(hist):
             # The only way we can be sure to have the real move in tp_move,
             # is if we have just failed high.
@@ -592,5 +781,5 @@ while True:
                 print(f"info depth {depth} score cp {score} pv {move_str}")
             if move_str and time.time() - start > think * 0.8:
                 break
-
+        # logging.info(f"Finished search in {time.time() - start} seconds, bestmove is {move_str or '(none)'}")
         print("bestmove", move_str or '(none)')

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-
+import datetime
 import re
 import time
 import argparse
@@ -10,7 +10,6 @@ import chess.engine
 import tqdm
 import asyncio
 import collections
-
 
 random.seed(42)
 
@@ -132,7 +131,7 @@ class Bench(Command):
             total_nodes += info.get("nodes", 0)
 
         print(f"Total nodes: {total_nodes}.")
-        print(f"Average knps: {round(total_nodes/(time.time() - start)/1000, 2)}.")
+        print(f"Average knps: {round(total_nodes / (time.time() - start) / 1000, 2)}.")
 
 
 ###############################################################################
@@ -159,6 +158,7 @@ class SelfPlay(Command):
                 limit = chess.engine.Limit(white_clock=wtime, black_clock=btime, white_inc=inc, black_inc=inc)
 
                 start = time.time()
+                #print(f"asking for move from engine at {datetime.datetime.now().strftime('%H:%M:%S.%f')}")
                 result = await engine.play(board, limit)
                 elasped = time.time() - start
 
@@ -167,6 +167,7 @@ class SelfPlay(Command):
                 else:
                     btime -= elasped - inc
 
+                #print(f"got from engine {result} after {board.turn == chess.WHITE} for {elasped:.2f}s, at {datetime.datetime.now().strftime('%H:%M:%S:%f')}")
                 board.push(result.move)
                 pbar.update(1)
             pbar.update(100 - pbar.n)
@@ -182,12 +183,12 @@ def info_to_desc(info):
     if "nodes" in info and "time" in info:
         # Add 1 to denominator, since time could be rounded to 0
         nps = info["nodes"] / (info["time"] + 1)
-        desc.append(f"knps: {round(nps/1000, 2)}")
+        desc.append(f"knps: {round(nps / 1000, 2)}")
     if "depth" in info:
         desc.append(f"depth: {info['depth']}")
     if "score" in info:
         #:wprint(dir(info['score']))
-        desc.append(f"score: {info['score'].pov(chess.WHITE).cp/100:.1f}")
+        desc.append(f"score: {info['score'].pov(chess.WHITE).cp / 100:.1f}")
     return ", ".join(desc)
 
 
@@ -300,8 +301,8 @@ class Draw(Command):
             total += 1
             board, _ = chess.Board.from_epd(line)
             with await engine.analysis(board, limit) as analysis:
-                last_lower = -10**10
-                last_upper = 10**10
+                last_lower = -10 ** 10
+                last_upper = 10 ** 10
                 async for info in analysis:
                     pb.set_description(info_to_desc(info))
                     if not "score" in info:

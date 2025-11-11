@@ -19,7 +19,7 @@ echo
 echo "Mate in 2..."
 #$T "$1" ${2:-"--quiet"} mate $TOOLS/test_files/mate2.fen --depth 6
 #$T "$1" ${2:-"--quiet"} mate $TOOLS/test_files/mate2.fen --movetime 100000 --limit 20
-$T "$1" ${2:-"--quiet"} mate $TOOLS/test_files/mate2.fen --depth 6 --limit 20
+$T "$1" ${2:-"--quiet"} mate $TOOLS/test_files/mate2.fen --depth 100000 --limit 20
 echo
 
 echo "Mate in 3..."

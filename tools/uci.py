@@ -7,6 +7,14 @@ from functools import partial
 
 print = partial(print, flush=True)
 
+import logging
+
+logging.basicConfig(
+    filename="test.log",
+    level=logging.INFO,
+    format="%(asctime)s %(levelname)s %(message)s",
+)
+
 
 def render_move(move, white_pov):
     if move is None:
@@ -52,12 +60,16 @@ def go_loop(searcher, hist, stop_event, max_movetime=0, max_depth=0, debug=False
         else:
             fields["score cp"] = f"{score} upperbound"
         print("info", " ".join(f"{k} {v}" for k, v in fields.items()))
+        # logging.info(f"depth {depth}, time {elapsed}, nodes {searcher.nodes}, nps {searcher.nodes / elapsed}")
 
         # We may not have a move yet at depth = 1
         if depth > 1:
             if elapsed > max_movetime * 2 / 3:
+                # logging.info(
+                #     f"stopping at depth {depth} after {elapsed} seconds, time limit of {max_movetime * 2 / 3:.2f} seconds reached")
                 break
             if stop_event.is_set():
+                # logging.info(f"stopping at depth {depth} after {elapsed} seconds, got event")
                 break
 
     # FIXME: If we are in "go infinite" we aren't actually supposed to stop the
@@ -65,17 +77,18 @@ def go_loop(searcher, hist, stop_event, max_movetime=0, max_depth=0, debug=False
     # we are in "go infinite" since it's simply translated to "go depth 100".
 
     my_pv = pv(searcher, hist[-1], include_scores=False)
+    # logging.info(f"got move {my_pv[0] if my_pv else '(no move!)'}, at depth {depth}, after {elapsed} seconds")
     print("bestmove", my_pv[0] if my_pv else "(none)")
 
 
 def mate_loop(
-    searcher,
-    hist,
-    stop_event,
-    max_movetime=0,
-    max_depth=0,
-    find_draw=False,
-    debug=False,
+        searcher,
+        hist,
+        stop_event,
+        max_movetime=0,
+        max_depth=0,
+        find_draw=False,
+        debug=False,
 ):
     start = time.time()
     for d in range(int(max_depth) + 1):
@@ -113,7 +126,6 @@ def mate_loop(
 
 
 def perft(pos, depth, debug=False):
-
     def _perft_count(pos, depth):
         # Check that we didn't get to an illegal position
         if can_kill_king(pos):
@@ -212,7 +224,7 @@ def run(sunfish_module, startpos):
                             hist.append(hist[-1].move(parse_move(move, len(hist) % 2 == 1)))
 
                 elif args[0] == "go":
-                    think = 10**6
+                    think = 10 ** 6
                     max_depth = 100
                     loop = go_loop
 
@@ -305,8 +317,8 @@ def get_color(pos):
 def can_kill_king(pos):
     # If we just checked for opponent moves capturing the king, we would miss
     # captures in case of illegal castling.
-    #MATE_LOWER = 60_000 - 10 * 929
-    #return any(pos.value(m) >= MATE_LOWER for m in pos.gen_moves())
+    # MATE_LOWER = 60_000 - 10 * 929
+    # return any(pos.value(m) >= MATE_LOWER for m in pos.gen_moves())
     return any(pos.board[m.j] == 'k' or abs(m.j - pos.kp) < 2 for m in pos.gen_moves())
 
 
@@ -318,14 +330,21 @@ def pv(searcher, pos, include_scores=True, include_loop=False):
     if include_scores:
         res.append(str(pos.score))
     while True:
+        move = None
         if hasattr(pos, "wf"):
             move = searcher.tp_move.get(pos.hash())
+            #logging.info(f"tp_move is {move} for pos.hash()={pos.hash()} and tp_move={searcher.tp_move}")
         elif hasattr(searcher, "tp_move"):
-            move = searcher.tp_move.get(pos)
+            move = searcher.tp_move.get(pos.hash())
+            #logging.info(f"tp_move is {move} for pos={pos} and tp_move={searcher.tp_move}")
         elif hasattr(searcher, "tt_new"):
             move = searcher.tt_new[0][pos, True].move
         # The tp may have illegal moves, given lower depths don't detect king killing
-        if move is None or can_kill_king(pos.move(move)):
+        if move is None:
+            # logging.info(f"tp_move is None for {pos}")
+            break
+        if can_kill_king(pos.move(move)):
+            # logging.info(f"can_kill_king for {pos}")
             break
         res.append(render_move(move, get_color(pos) == WHITE))
         pos, color = pos.move(move), 1 - color
