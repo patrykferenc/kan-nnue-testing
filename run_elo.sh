@@ -5,9 +5,9 @@
 ENGINE_PATH="sunfish_nnue.py"
 BATCH_SIZE=1
 COMPILE_MODE="default" #the only one that works for now xd
-NUM_GAMES=1
-THREADS=1
-DEPTH=5
+NUM_GAMES=25
+#THREADS=
+DEPTH=3
 #NODES=5000  # Nodes per move
 BOOK_PATH="./tools/test_files/komodo.bin"
 
@@ -35,7 +35,6 @@ python network_tester.py \
     --network-a "$NETWORK_A_NAME" "$NETWORK_A_MODEL" "$NETWORK_A_PATH" \
     --network-b "$NETWORK_B_NAME" "$NETWORK_B_MODEL" "$NETWORK_B_PATH" \
     --num-games $NUM_GAMES \
-    --threads $THREADS \
     --batch-size $BATCH_SIZE \
     --compile-mode $COMPILE_MODE \
     --depth $DEPTH \

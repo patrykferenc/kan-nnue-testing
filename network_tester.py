@@ -22,6 +22,32 @@ import chess.engine
 import chess.pgn
 from tqdm import tqdm
 
+# LOGS
+# Generate a small random id once per process/run
+import random
+import logging
+
+RUN_RID = random.randint(0, 99)
+
+logging.basicConfig(
+    filename="test.log",
+    level=logging.INFO,
+    format="%(asctime)s %(levelname)s [id=%(rid)02d] %(message)s",
+)
+
+# Ensure every LogRecord gets the same run id
+_old_factory = logging.getLogRecordFactory()
+
+
+def _attach_run_id_factory(*args, **kwargs):
+    record = _old_factory(*args, **kwargs)
+    if not hasattr(record, "rid"):
+        record.rid = RUN_RID
+    return record
+
+
+logging.setLogRecordFactory(_attach_run_id_factory)
+
 
 # Result tracking
 class GameResult:
@@ -101,13 +127,16 @@ class NetworkTester:
                 engine = white_engine if board.turn == chess.WHITE else black_engine
 
                 # Set time control
-                limit = chess.engine.Limit()
                 if self.args.nodes:
-                    limit.nodes = self.args.nodes
+                    limit = chess.engine.Limit(nodes=self.args.nodes)
                 elif self.args.movetime:
-                    limit.time = self.args.movetime / 1000.0
+                    limit = chess.engine.Limit(time=self.args.movetime / 1000)
                 elif self.args.depth:
-                    limit.depth = self.args.depth
+                    limit = chess.engine.Limit(depth=self.args.depth)
+                else:
+                    limit = chess.engine.Limit(nodes=10000)
+
+                logging.info(f"Playing move {move_count + 1}, using limit {limit}")
 
                 result = await engine.play(board, limit)
                 board.push(result.move)
@@ -328,16 +357,16 @@ def main():
     # Game settings
     parser.add_argument("--num-games", type=int, default=100,
                         help="Number of games to play")
-    parser.add_argument("--threads", type=int, default=4,
+    parser.add_argument("--threads", type=int, default=1,
                         help="Number of parallel games")
-    parser.add_argument("--batch-size", type=int, default=64,
+    parser.add_argument("--batch-size", type=int, default=1,
                         help="Batch size for NNUE evaluation")
     parser.add_argument("--compile-mode", default="default",
                         choices=["default", "reduce-overhead", "max-autotune"],
                         help="PyTorch compilation mode")
 
     # Time control
-    parser.add_argument("--nodes", type=int, default=10000,
+    parser.add_argument("--nodes", type=int,
                         help="Nodes per move (default)")
     parser.add_argument("--movetime", type=int,
                         help="Time per move in milliseconds")

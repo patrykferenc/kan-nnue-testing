@@ -10,13 +10,30 @@ from functools import partial, lru_cache
 print = partial(print, flush=True)
 
 # LOGS
+# Generate a small random id once per process/run
+import random
 import logging
+
+RUN_RID = random.randint(0, 99)
 
 logging.basicConfig(
     filename="test.log",
     level=logging.INFO,
-    format="%(asctime)s %(levelname)s %(message)s",
+    format="%(asctime)s %(levelname)s [id=%(rid)02d] %(message)s",
 )
+
+# Ensure every LogRecord gets the same run id
+_old_factory = logging.getLogRecordFactory()
+
+
+def _attach_run_id_factory(*args, **kwargs):
+    record = _old_factory(*args, **kwargs)
+    if not hasattr(record, "rid"):
+        record.rid = RUN_RID
+    return record
+
+
+logging.setLogRecordFactory(_attach_run_id_factory)
 
 import warnings
 
@@ -697,6 +714,7 @@ class Searcher:
             # 'while lower != upper' would work, but play tests show a margin of 20 plays
             # better.
             lower, upper = -MATE_UPPER, MATE_UPPER
+            # logging.info(f"starting binary search at depth={depth}")
             while lower < upper - EVAL_ROUGHNESS:
                 # logging.info(f"starting bound at depth={depth}, lower={lower}, upper={upper}")
                 score = self.bound(pos, gamma, depth)
@@ -704,7 +722,8 @@ class Searcher:
                     lower = score
                 if score < gamma:
                     upper = score
-                # logging.info(f"finished bound at depth={depth}, lower={lower}, upper={upper}, score={score}, nodes(k)={self.nodes / 1000:.2f},got {self.tp_move.get(pos.hash())}")
+                # logging.info(
+                #     f"finished bound at depth={depth}, lower={lower}, upper={upper}, score={score}, nodes(k)={self.nodes / 1000:.2f},got {self.tp_move.get(pos.hash())}")
                 yield depth, gamma, score, self.tp_move.get(pos.hash())
                 gamma = (lower + upper + 1) // 2
 

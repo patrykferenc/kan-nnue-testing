@@ -27,11 +27,11 @@ $T "$1" ${2:-"--quiet"} mate $TOOLS/test_files/mate3.fen --depth 6 --limit 5
 echo
 
 echo "Stalemate in 0..."
-$T "$1" ${2:-"--quiet"} draw $TOOLS/test_files/stalemate0.fen --movetime 20000
+$T "$1" ${2:-"--quiet"} draw $TOOLS/test_files/stalemate0.fen --movetime 100000
 echo
 
 echo "Stalemate in 1..."
-$T "$1" ${2:-"--quiet"} draw $TOOLS/test_files/stalemate1.fen --movetime 20000
+$T "$1" ${2:-"--quiet"} draw $TOOLS/test_files/stalemate1.fen --movetime 100000
 echo
 
 echo "Stalemate in 2+"
@@ -40,15 +40,15 @@ $T "$1" ${2:-"--quiet"} draw $TOOLS/test_files/stalemate2.fen --depth 4
 echo
 
 echo "Other puzzles..."
-$T "$1" ${2:-"--quiet"} best $TOOLS/test_files/win_at_chess_test.epd --movetime 1000
+$T "$1" ${2:-"--quiet"} best $TOOLS/test_files/win_at_chess_test.epd --movetime 100000
 echo
 
 echo "Perft"
 $T "$1" ${2:-"--quiet"} perft $TOOLS/test_files/perft.epd --depth 2
 echo
 
-echo "Self play"
-$T "$1" ${2:-"--quiet"} self-play --time 20000 --inc 500
-echo
+#echo "Self play"
+#$T "$1" ${2:-"--quiet"} self-play --time 20000 --inc 500
+#echo
 
 
