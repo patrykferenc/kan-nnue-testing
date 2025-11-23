@@ -1,0 +1,9 @@
+{
+  "engine_path": "/home/patryk/msc/nnue-pytorch/mystuff/experiments/experiment_baseline-20250707_141503/stockfish_base/src/stockfish",
+  "data_path": "/home/patryk/msc/data/T60T70wIsRightFarseer.binpack",
+  "checkpoint_path": "/home/patryk/msc/nnue-pytorch/mystuff/experiments/experiment_baseline-20250728_132210/training/run_0/lightning_logs/version_0/checkpoints/epoch=599-step=2929800.ckpt",
+  "model_name": "sfnnvkan_early_3072_15_32",
+  "count": 10000,
+  "batch_size": 1000,
+  "output_dir": "./results"
+}
