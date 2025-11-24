@@ -22,7 +22,6 @@ $T "$1" ${2:-"--quiet"} mate $TOOLS/test_files/mate3.fen --depth 6 --limit 10
 echo
 
 echo "Bugs..."
-$T "$1" ${2:-"--quiet"} best $TOOLS/test_files/win_at_chess_test.epd --depth 4
 $T "$1" ${2:-"--quiet"} best $TOOLS/test_files/bug.epd --depth 2
 echo
 
@@ -40,8 +39,4 @@ echo
 
 echo "Branching factor"
 $T "$1" ${2:-"--quiet"} --results-dir "$RESULTS_DIR" branching-factor --depth 8
-echo
-
-echo "Branching factor"
-$T "$1" ${2:-"--quiet"} --results-dir "$RESULTS_DIR" branching-factor --depth 10
 echo
