@@ -423,6 +423,7 @@ def is_in_check(pos):
     # Must check BOTH: direct capture of 'k' AND king passant (kp)
     for move in flipped.gen_moves():
         if flipped.board[move.j] == 'k' or abs(move.j - flipped.kp) < 2:
+            #logging.info(f"in check at pos {position_to_fen(pos)}")
             return True
 
     return False
@@ -454,6 +455,10 @@ class Timer:
 
     def time(self, name):
         return TimerContext(self, name)
+
+    def reset(self):
+        """Clear all recorded timings."""
+        self.timings.clear()
 
     def report(self):
         total = sum(self.timings.values())
@@ -565,12 +570,6 @@ class Searcher:
         #    gamma <= r <= s(pos)   if gamma <= s(pos)
         self.nodes += 1
 
-        # Depth <= 0 is QSearch. Here any position is searched as deeply as is needed for
-        # calmness, and from this point on there is no difference in behaviour depending on
-        # depth, so so there is no reason to keep different depths in the transposition table.
-        if depth <= 0:
-            return self.quiesce(pos, gamma - 1, gamma, ply)
-
         # with timer.time("bound_tp"):
         if len(self.eval_stack) <= ply:
             self.eval_stack.extend([None] * (ply - len(self.eval_stack) + 1))
@@ -585,6 +584,13 @@ class Searcher:
         # replies, which might hide them and lead to illegal moves.
         if pos.score <= -MATE_LOWER:
             return -MATE_UPPER
+
+        # Depth <= 0 is QSearch. Here any position is searched as deeply as is needed for
+        # calmness, and from this point on there is no difference in behaviour depending on
+        # depth, so so there is no reason to keep different depths in the transposition table.
+        with timer.time("quiesce"):
+            if depth <= 0:
+                return self.quiesce(pos, gamma - 1, gamma, ply)
 
         # Look in the table if we have already searched this position before.
         # We also need to be sure, that the stored search was over the same
@@ -806,17 +812,22 @@ class Searcher:
                         reduction = max(1, min(reduction, depth - 1))
 
                 # Search with reduction
-                if reduction > 0:
-                    # Search at reduced depth
-                    new_depth = max(0, depth - 1 - reduction)
-                    score = -self.bound(pos.move(move), 1 - gamma, new_depth, False, ply + 1)
+                with timer.time("bound_search"):
+                    if reduction > 0:
+                        with timer.time("bound_search_reduced"):
+                            # Search at reduced depth
+                            new_depth = max(0, depth - 1 - reduction)
+                            with timer.time("bound_search_reduced_low"):
+                                score = -self.bound(pos.move(move), 1 - gamma, new_depth, False, ply + 1)
 
-                    # If reduced search fails high, re-search at full depth
-                    if score >= gamma:
-                        score = -self.bound(pos.move(move), 1 - gamma, depth - 1, False, ply + 1)
-                else:
-                    # Normal full-depth search
-                    score = -self.bound(pos.move(move), 1 - gamma, depth - 1, False, ply + 1)
+                            # If reduced search fails high, re-search at full depth
+                            if score >= gamma:
+                                with timer.time("bound_search_reduced_high"):
+                                    score = -self.bound(pos.move(move), 1 - gamma, depth - 1, False, ply + 1)
+                    else:
+                        # Normal full-depth search
+                        with timer.time("bound_search_full"):
+                            score = -self.bound(pos.move(move), 1 - gamma, depth - 1, False, ply + 1)
 
             best = max(best, score)
             if best >= gamma:
@@ -858,6 +869,7 @@ class Searcher:
         # position alters the score of all other positions, as there may now be
         # a path that leads to a repetition.
         self.tp_score.clear()
+        timer.reset()
 
         self.age_history()
 
@@ -866,24 +878,26 @@ class Searcher:
         gamma = 0
         # In finished games, we could potentially go far enough to cause a recursion
         # limit exception. Hence we bound the ply.
-        # try:
-        for depth in range(1, 1000):
-            # yield depth, None, 0, "cp"
-            # The inner loop is a binary search on the score of the position.
-            # Inv: lower <= score <= upper
-            # 'while lower != upper' would work, but play tests show a margin of 20 plays
-            # better.
-            lower, upper = -MATE_UPPER, MATE_UPPER
-            while lower < upper - EVAL_ROUGHNESS:
-                score = self.bound(pos, gamma, depth)
-                if score >= gamma:
-                    lower = score
-                if score < gamma:
-                    upper = score
-                yield depth, gamma, score, self.tp_move.get(pos.hash())
-                gamma = (lower + upper + 1) // 2
-    # finally:
-    #     timer.report()
+        try:
+            for depth in range(1, 1000):
+                # yield depth, None, 0, "cp"
+                # The inner loop is a binary search on the score of the position.
+                # Inv: lower <= score <= upper
+                # 'while lower != upper' would work, but play tests show a margin of 20 plays
+                # better.
+                lower, upper = -MATE_UPPER, MATE_UPPER
+                while lower < upper - EVAL_ROUGHNESS:
+                    score = self.bound(pos, gamma, depth)
+                    if score >= gamma:
+                        lower = score
+                    if score < gamma:
+                        upper = score
+                    # logging.info(
+                    # info    f"Depth {depth}: {lower} <= score <= {upper}, and yielding move {self.tp_move.get(pos.hash())}")
+                    yield depth, gamma, score, self.tp_move.get(pos.hash())
+                    gamma = (lower + upper + 1) // 2
+        finally:
+            timer.report()
 
 
 ###############################################################################
