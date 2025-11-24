@@ -258,7 +258,8 @@ class Position(namedtuple("Position", "board score wc bc ep kp myhash")):
                             break
                         # If the pawn captures, it has to either be a piece, an
                         # enpassant square, or a moving king.
-                        if d in (N + W, N + E) and q == "." and j not in (self.ep, self.kp, self.kp - 1, self.kp + 1):
+                        if d in (N + W, N + E) and q == "." and j not in (self.ep, self.kp, self.kp - 1,
+                                                                          self.kp + 1):
                             break
                         # If we move to the last row, we can be anything
                         if A8 <= j <= H8:
@@ -292,57 +293,51 @@ class Position(namedtuple("Position", "board score wc bc ep kp myhash")):
 
     def compute_value(self):
         """Direct single position evaluation"""
-        with timer.time("eval"):
-            cache_key = self.hash()
-            cached_value = eval_cache.get(cache_key)
-            if cached_value is not None:
-                return cached_value
+        cache_key = self.hash()
+        cached_value = eval_cache.get(cache_key)
+        if cached_value is not None:
+            return cached_value
 
             # Check for missing kings
-            has_our_king = 'K' in self.board
-            has_their_king = 'k' in self.board
+        has_our_king = 'K' in self.board
+        has_their_king = 'k' in self.board
 
-            if not has_our_king:
-                eval_cache.put(cache_key, -MATE_UPPER)
-                return -MATE_UPPER
+        if not has_our_king:
+            eval_cache.put(cache_key, -MATE_UPPER)
+            return -MATE_UPPER
 
-            if not has_their_king:
-                eval_cache.put(cache_key, MATE_UPPER)
-                return MATE_UPPER
+        if not has_their_king:
+            eval_cache.put(cache_key, MATE_UPPER)
+            return MATE_UPPER
 
-                # Convert to FEN and evaluate
-            fen = position_to_fen(self)
+        # Convert to FEN and evaluate
+        fen = position_to_fen(self)
 
-            # Create single-position batch
-            b = nnue_dataset.make_sparse_batch_from_fens(
-                feature_set, [fen], [0], [1], [0]
-            )
+        # Create single-position batch
+        b = nnue_dataset.make_sparse_batch_from_fens(
+            feature_set, [fen], [0], [1], [0]
+        )
 
-            tensors = b.contents.get_tensors('cuda')
-            (us, them, white_indices, white_values, black_indices, black_values,
-             outcome, score, psqt_indices, layer_stack_indices) = tensors
+        tensors = b.contents.get_tensors('cuda')
+        (us, them, white_indices, white_values, black_indices, black_values,
+         outcome, score, psqt_indices, layer_stack_indices) = tensors
 
-            # logging.info(f"them {them} score {score} outcome {outcome}")
-            with torch.no_grad():
-                eval_tensor = model.forward(
-                    us, them, white_indices, white_values, black_indices, black_values,
-                    psqt_indices, layer_stack_indices
-                ) * 600.0
+        with torch.no_grad():
+            eval_tensor = model.forward(
+                us, them, white_indices, white_values, black_indices, black_values,
+                psqt_indices, layer_stack_indices
+            ) * 600.0
 
-            # logging.info(f"eval_tensor {eval_tensor}")
-            eval_score = eval_tensor[0].item()
-            # logging.info(f"eval_score {eval_score}")
+        eval_score = eval_tensor[0].item()
 
-            # Flip score if black to move
-            if them[0].item() > 0.5:
-                eval_score = -eval_score
+        # Flip score if black to move
+        if them[0].item() > 0.5:
+            eval_score = -eval_score
 
-            # logging.info(f"eval_score {eval_score}")
-            eval_score = int(eval_score)
-            # logging.info(f"eval_score {eval_score}")
+        eval_score = int(eval_score)
 
-            nnue_dataset.destroy_sparse_batch(b)
-            eval_cache.put(cache_key, eval_score)
+        nnue_dataset.destroy_sparse_batch(b)
+        eval_cache.put(cache_key, eval_score)
 
         return eval_score
 
@@ -438,19 +433,18 @@ def futility_margin(depth, improving):
     NNUE range: ~±8000 (scaled by 600 from ±100000)
     Margins should be ~5-15% of eval range
     """
-    # Base margins scaled for NNUE (roughly in centipawns * 6)
     base_margins = {
-        1: 600,  # ~1 pawn
-        2: 900,  # ~1.5 pawns
-        3: 1200,  # ~2 pawns
-        4: 1500,  # ~2.5 pawns
+        1: 300,  # ~1 pawn
+        2: 650,  # ~1.5 pawns
+        3: 900,  # ~2 pawns
+        4: 1100,  # ~2.5 pawns
     }
 
-    margin = base_margins.get(depth, 1500)
+    margin = base_margins.get(depth, 1200)
 
     # Adjust for improving: more conservative when declining
     if not improving:
-        margin = int(margin * 0.85)
+        margin = int(margin * 1.15)
 
     return margin
 
@@ -551,8 +545,11 @@ class Searcher:
         if alpha < stand_pat:
             alpha = stand_pat
 
+        if ply >= 5:
+            return alpha
+
         # Delta pruning margin (scaled for NNUE: ~1.5 queens)
-        delta_margin = 1400
+        delta_margin = 1850
 
         # Generate captures only
         captures = [m for m in pos.gen_moves() if pos.is_capture(m)]
@@ -567,7 +564,7 @@ class Searcher:
 
             # History contribution (scaled appropriately)
             history = self.get_history_score(m)
-            history_bonus = (history * 500) // max(self.history_max, 1)
+            history_bonus = (history * 1500) // max(self.history_max, 1)
 
             return -(mvv_lva + history_bonus)
 
@@ -613,9 +610,8 @@ class Searcher:
             return -MATE_UPPER
 
         # Quiescence search at horizon
-        with timer.time("quiesce"):
-            if depth <= 0:
-                return self.quiesce(pos, gamma - 1, gamma, ply)
+        if depth <= 0:
+            return self.quiesce(pos, gamma - 1, gamma, ply)
 
         # Look in the table if we have already searched this position before.
         # We also need to be sure, that the stored search was over the same
@@ -646,8 +642,7 @@ class Searcher:
 
         # ==== PRUNING SETUP ====
         # Compute these once upfront
-        with timer.time("is_in_check"):
-            in_check = is_in_check(pos) if not root else False
+        in_check = is_in_check(pos) if not root else False
         eval_score = pos.score
 
         # Calculate "improving" once
@@ -706,7 +701,7 @@ class Searcher:
         # Prepare to skip quiet moves in hopeless positions
         futility_pruning = False
         if (not root and
-                depth <= 3 and
+                depth <= 4 and
                 not in_check and
                 not near_mate):
 
@@ -743,109 +738,102 @@ class Searcher:
 
             # Sort all moves by score
 
-        with timer.time("sort_moves"):
-            all_moves.sort(key=move_score)
+        all_moves.sort(key=move_score)
 
         # Prioritize killer move if it exists
-        with timer.time("killer_prio"):
-            if killer and killer in all_moves:
-                all_moves.remove(killer)
-                all_moves.insert(0, killer)
+        if killer and killer in all_moves:
+            all_moves.remove(killer)
+            all_moves.insert(0, killer)
 
         # ==== MAIN SEARCH LOOP ====
         best = -MATE_UPPER
         moves_searched = 0
         searched_moves = []  # Track all searched moves for history update
 
-        with timer.time("move_loop"):
-            for move in all_moves:
-                # Forward futility pruning: skip quiet moves in hopeless positions
-                if (futility_pruning and
-                        not pos.is_capture(move) and
-                        not move.prom):
-                    continue
+        for move in all_moves:
+            # Forward futility pruning: skip quiet moves in hopeless positions
+            if (futility_pruning and
+                    not pos.is_capture(move) and
+                    not move.prom):
+                continue
 
-                moves_searched += 1
-                searched_moves.append(move)
+            moves_searched += 1
+            searched_moves.append(move)
 
-                # ==== LATE MOVE REDUCTION (LMR) ====
-                reduction = 0
+            # ==== LATE MOVE REDUCTION (LMR) ====
+            reduction = 0
 
-                # LMR conditions
-                if (not root and
-                        depth >= 3 and
-                        moves_searched >= 4 and  # Skip first 3 moves
-                        not pos.is_capture(move) and
-                        not move.prom and
-                        not in_check):
+            # LMR conditions
+            if (not root and
+                    depth >= 3 and
+                    moves_searched >= 3 and  # Skip first 2 moves
+                    not pos.is_capture(move) and
+                    not move.prom and
+                    not in_check):
 
-                    # Base reduction using logarithmic formula
-                    import math
-                    base_reduction = 0.75 + math.log(depth) * math.log(moves_searched) * 0.5
-                    reduction = int(base_reduction)
-                    reduction = max(1, min(reduction, depth - 2))
+                # Base reduction using logarithmic formula
+                import math
+                base_reduction = 0.75 + math.log(depth) * math.log(moves_searched) * 0.5
+                reduction = int(base_reduction)
+                reduction = max(1, min(reduction, depth - 2))
 
-                    # === REDUCTION ADJUSTMENTS ===
+                # === REDUCTION ADJUSTMENTS ===
 
-                    # 1. History: reduce LESS for good moves, MORE for bad moves
-                    history_score = self.get_history_score(move)
-                    history_threshold = self.history_max // 3
-                    if history_score > history_threshold:
-                        reduction = max(1, reduction - 1)
-                    elif history_score < self.history_max // 10:
-                        reduction += 1
+                # 1. History: reduce LESS for good moves, MORE for bad moves
+                history_score = self.get_history_score(move)
+                history_threshold = self.history_max // 3
+                if history_score > history_threshold:
+                    reduction = max(1, reduction - 1)
+                elif history_score < self.history_max // 10:
+                    reduction += 1
 
-                    # 2. Improving: reduce LESS when improving (search harder)
-                    #    reduce MORE when declining (opponent may have threats)
-                    if improving:
-                        reduction = max(1, reduction - 1)  # FIXED: was += 1
-                    else:
-                        reduction += 1
+                # 2. Improving: reduce LESS when improving (search harder)
+                #    reduce MORE when declining (opponent may have threats)
+                if improving:
+                    reduction = max(1, reduction - 1)  # FIXED: was += 1
+                else:
+                    reduction += 1
 
-                    # 3. Very late moves: more aggressive reduction
-                    if moves_searched >= 20:
-                        reduction += 2
-                    elif moves_searched >= 12:
-                        reduction += 1
+                # 3. Very late moves: more aggressive reduction
+                if moves_searched >= 20:
+                    reduction += 2
+                elif moves_searched >= 12:
+                    reduction += 1
 
-                    # 4. Deep searches: allow more reduction
-                    if depth >= 8:
-                        reduction += 1
+                # 4. Deep searches: allow more reduction
+                if depth >= 8:
+                    reduction += 1
 
-                    # Final bounds
-                    reduction = max(1, min(reduction, depth - 1))
+                # Final bounds
+                reduction = max(1, min(reduction, depth - 1))
 
-                # Search the move
-                with timer.time("move_search_reductions"):
-                    if reduction > 0:
-                        # Reduced depth search
-                        with timer.time("reduced_depth_search"):
-                            reduced_depth = max(0, depth - 1 - reduction)
-                            score = -self.bound(pos.move(move), 1 - gamma, reduced_depth, False, ply + 1)
+            # Search the move
+            if reduction > 0:
+                # Reduced depth search
+                reduced_depth = max(0, depth - 1 - reduction)
+                score = -self.bound(pos.move(move), 1 - gamma, reduced_depth, False, ply + 1)
 
-                        # Re-search if it looks good
-                        with timer.time("reduced_depth_search_contd"):
-                            if score >= gamma:
-                                score = -self.bound(pos.move(move), 1 - gamma, depth - 1, False, ply + 1)
-                    else:
-                        # Full depth search
-                        with timer.time("full_depth_search"):
-                            score = -self.bound(pos.move(move), 1 - gamma, depth - 1, False, ply + 1)
+                # Re-search if it looks good
+                if score >= gamma:
+                    score = -self.bound(pos.move(move), 1 - gamma, depth - 1, False, ply + 1)
+            else:
+                # Full depth search
+                score = -self.bound(pos.move(move), 1 - gamma, depth - 1, False, ply + 1)
 
-                best = max(best, score)
-                if best >= gamma:
-                    # Beta cutoff - update history
-                    if move is not None:
-                        # Save killer move
-                        self.tp_move[pos.hash()] = move
+            best = max(best, score)
+            if best >= gamma:
+                # Beta cutoff - update history
+                if move is not None:
+                    # Save killer move
+                    self.tp_move[pos.hash()] = move
 
-                        # Update history heuristic
-                        self.update_history(move, depth, cutoff=True)
-                        # Penalize moves that were searched before the cutoff
-                        for prev_move in searched_moves[:-1]:
-                            if prev_move is not None:
-                                self.update_history(prev_move, depth, cutoff=False)
-                    break
+                    # Update history heuristic
+                    self.update_history(move, depth, cutoff=True)
+                    # Penalize moves that were searched before the cutoff
+                    for prev_move in searched_moves[:-1]:
+                        if prev_move is not None:
+                            self.update_history(prev_move, depth, cutoff=False)
+                break
 
         # No beta cutoff: penalize searched quiet moves
         if best < gamma:
@@ -884,25 +872,21 @@ class Searcher:
         gamma = 0
         # In finished games, we could potentially go far enough to cause a recursion
         # limit exception. Hence we bound the ply.
-        try:
-            with timer.time("search"):
-                for depth in range(1, 1000):
-                    # yield depth, None, 0, "cp"
-                    # The inner loop is a binary search on the score of the position.
-                    # Inv: lower <= score <= upper
-                    # 'while lower != upper' would work, but play tests show a margin of 20 plays
-                    # better.
-                    lower, upper = -MATE_UPPER, MATE_UPPER
-                    while lower < upper - EVAL_ROUGHNESS:
-                        score = self.bound(pos, gamma, depth)
-                        if score >= gamma:
-                            lower = score
-                        if score < gamma:
-                            upper = score
-                        yield depth, gamma, score, self.tp_move.get(pos.hash())
-                        gamma = (lower + upper + 1) // 2
-        finally:
-            timer.report()
+        for depth in range(1, 1000):
+            # yield depth, None, 0, "cp"
+            # The inner loop is a binary search on the score of the position.
+            # Inv: lower <= score <= upper
+            # 'while lower != upper' would work, but play tests show a margin of 20 plays
+            # better.
+            lower, upper = -MATE_UPPER, MATE_UPPER
+            while lower < upper - EVAL_ROUGHNESS:
+                score = self.bound(pos, gamma, depth)
+                if score >= gamma:
+                    lower = score
+                if score < gamma:
+                    upper = score
+                yield depth, gamma, score, self.tp_move.get(pos.hash())
+                gamma = (lower + upper + 1) // 2
 
 
 ###############################################################################
