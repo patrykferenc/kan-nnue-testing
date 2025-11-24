@@ -39,7 +39,7 @@ echo "$RESULTS_DIR"
 #echo
 
 echo "Branching factor"
-$T "$1" ${2:-"--quiet"} --results-dir "$RESULTS_DIR" branching-factor --depth 4
+$T "$1" ${2:-"--quiet"} --results-dir "$RESULTS_DIR" branching-factor --depth 8
 echo
 
 #echo "Perft"
