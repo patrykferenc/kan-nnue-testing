@@ -218,7 +218,6 @@ class Bench(Command):
         parser.add_argument(
             "--limit", type=int, default=10000, help="Maximum positions to analyse"
         )
-        add_skip_argument(parser)
 
     @classmethod
     async def run(self, engine, args):
@@ -524,6 +523,12 @@ class Draw(Command):
         parser.add_argument(
             "file", type=argparse.FileType("r"), help="such as tests/stalemate2.fen."
         )
+        parser.add_argument(
+            "--limit",
+            type=int,
+            default=10000,
+            help="Take only this many lines from the file",
+        )
         add_limit_argument(parser)
         add_skip_argument(parser)
 
@@ -538,6 +543,7 @@ class Draw(Command):
             if not args.quiet:
                 print(f"Skipping first {args.skip} lines, starting from line {args.skip + 1}")
         lines = lines[: args.limit]
+
 
         with ResultsWriter(getattr(args, 'results_dir', None), cls.name,
                            ['fen', 'success', 'depth', 'nodes', 'time_s', 'score']) as writer:
