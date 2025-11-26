@@ -26,7 +26,6 @@ logging.basicConfig(
 )
 
 
-
 ###############################################################################
 # Results saving utilities
 ###############################################################################
@@ -94,6 +93,15 @@ def save_results_csv(results_dir, command_name, results_data, fieldnames):
         writer.writerows(results_data)
 
     print(f"Results saved to {filename}")
+   
+
+def add_skip_argument(parser):
+    parser.add_argument(
+        "--skip",
+        type=int,
+        default=0,
+        help="Skip the first N lines from the file (useful for resuming tests)",
+    )
 
 
 class Command:
@@ -147,10 +155,16 @@ class Perft(Command):
             "file", type=argparse.FileType("r"), help="such as tests/queen.fen."
         )
         parser.add_argument("--depth", type=int, default=3)
+        add_skip_argument(parser)
 
     @classmethod
     async def run(cls, engine, args):
         lines = args.file.readlines()
+
+        if args.skip > 0:
+            lines = lines[args.skip:]
+            if not args.quiet:
+                print(f"Skipping first {args.skip} lines, starting from line {args.skip + 1}")
 
         with ResultsWriter(getattr(args, 'results_dir', None), cls.name,
                            ['depth', 'fen', 'expected_nodes', 'actual_nodes', 'success']) as writer:
@@ -204,6 +218,7 @@ class Bench(Command):
         parser.add_argument(
             "--limit", type=int, default=10000, help="Maximum positions to analyse"
         )
+        add_skip_argument(parser)
 
     @classmethod
     async def run(self, engine, args):
@@ -438,6 +453,7 @@ class Mate(Command):
             help="Take only this many lines from the file",
         )
         add_limit_argument(parser)
+        add_skip_argument(parser)
 
     @classmethod
     async def run(cls, engine, args):
@@ -445,6 +461,10 @@ class Mate(Command):
         total = 0
         success = 0
         lines = args.file.readlines()
+        if args.skip > 0:
+            lines = lines[args.skip:]
+            if not args.quiet:
+                print(f"Skipping first {args.skip} lines, starting from line {args.skip + 1}")
         lines = lines[: args.limit]
 
         with ResultsWriter(getattr(args, 'results_dir', None), cls.name,
@@ -505,17 +525,24 @@ class Draw(Command):
             "file", type=argparse.FileType("r"), help="such as tests/stalemate2.fen."
         )
         add_limit_argument(parser)
+        add_skip_argument(parser)
 
     @classmethod
     async def run(cls, engine, args):
         limit = get_limit(args)
         total, success = 0, 0
         cnt = collections.Counter()
+        lines = args.file.readlines()
+        if args.skip > 0:
+            lines = lines[args.skip:]
+            if not args.quiet:
+                print(f"Skipping first {args.skip} lines, starting from line {args.skip + 1}")
+        lines = lines[: args.limit]
 
         with ResultsWriter(getattr(args, 'results_dir', None), cls.name,
                            ['fen', 'success', 'depth', 'nodes', 'time_s', 'score']) as writer:
 
-            pb = tqdm.tqdm(args.file.readlines())
+            pb = tqdm.tqdm(lines)
             for line in pb:
                 total += 1
                 board, _ = chess.Board.from_epd(line)
@@ -589,12 +616,17 @@ class Best(Command):
             help="Take only this many lines from the file",
         )
         add_limit_argument(parser)
+        add_skip_argument(parser)
 
     @classmethod
     async def run(cls, engine, args):
         limit = get_limit(args)
         points, total = 0, 0
         lines = args.file.readlines()
+        if args.skip > 0:
+            lines = lines[args.skip:]
+            if not args.quiet:
+                print(f"Skipping first {args.skip} lines, starting from line {args.skip + 1}")
         lines = lines[: args.limit]
 
         with ResultsWriter(getattr(args, 'results_dir', None), cls.name,

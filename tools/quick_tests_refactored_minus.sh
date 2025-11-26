@@ -40,3 +40,15 @@ echo
 echo "Branching factor"
 $T "$1" ${2:-"--quiet"} --results-dir "$RESULTS_DIR" branching-factor --depth 8
 echo
+
+echo "Branching factor"
+$T "$1" ${2:-"--quiet"} --results-dir "$RESULTS_DIR" branching-factor --depth 10
+echo
+
+echo "Branching factor"
+$T "$1" ${2:-"--quiet"} --results-dir "$RESULTS_DIR" branching-factor --depth 12
+echo
+
+echo "Branching factor"
+$T "$1" ${2:-"--quiet"} --results-dir "$RESULTS_DIR" branching-factor --depth 14
+echo

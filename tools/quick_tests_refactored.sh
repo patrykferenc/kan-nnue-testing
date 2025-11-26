@@ -38,9 +38,9 @@ $T "$1" ${2:-"--quiet"} --results-dir "$RESULTS_DIR" draw $TOOLS/test_files/stal
 echo
 
 echo "WAC"
-$T "$1" ${2:-"--quiet"} --results-dir "$RESULTS_DIR" best $TOOLS/test_files/win_at_chess_test.epd --depth 8
+$T "$1" ${2:-"--quiet"} --results-dir "$RESULTS_DIR" best $TOOLS/test_files/win_at_chess_test.epd --depth 10
 echo
 
 echo "BKT"
-$T "$1" ${2:-"--quiet"} --results-dir "$RESULTS_DIR" best $TOOLS/test_files/bratko_kopec_test.epd --depth 10
+$T "$1" ${2:-"--quiet"} --results-dir "$RESULTS_DIR" best $TOOLS/test_files/bratko_kopec_test.epd --depth 12
 echo

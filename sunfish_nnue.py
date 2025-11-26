@@ -4,6 +4,7 @@ import sys
 from collections import namedtuple, OrderedDict
 from functools import partial, lru_cache
 from itertools import count
+import math
 
 import torch
 
@@ -209,7 +210,287 @@ EVAL_ROUGHNESS = 13
 opt_ranges = dict(
     EVAL_ROUGHNESS=(0, 50),
 )
+
+
 # minifier-hide end
+
+###############################################################################
+# Late Move Pruning (LMP) thresholds - from Stockfish
+# Formula: (3 + depth^2) / (2 - improving)
+###############################################################################
+
+def lmp_threshold(depth, improving):
+    """How many quiet moves to search before pruning the rest."""
+    return (3 + depth * depth) // (2 - int(improving))
+
+
+# Precomputed LMP table for quick lookup
+LMP_TABLE = {
+    (d, imp): lmp_threshold(d, imp)
+    for d in range(1, 10)
+    for imp in [True, False]
+}
+
+###############################################################################
+# SEE (Static Exchange Evaluation) - Piece values for SEE
+###############################################################################
+
+# SEE piece values (centipawns) - standard values
+SEE_VALUES = {
+    'P': 100, 'N': 320, 'B': 330, 'R': 500, 'Q': 900, 'K': 20000,
+    'p': 100, 'n': 320, 'b': 330, 'r': 500, 'q': 900, 'k': 20000,
+    '.': 0, ' ': 0, '\n': 0
+}
+
+# Piece ordering for SEE (least valuable first)
+SEE_PIECE_ORDER = {'P': 0, 'N': 1, 'B': 2, 'R': 3, 'Q': 4, 'K': 5,
+                   'p': 0, 'n': 1, 'b': 2, 'r': 3, 'q': 4, 'k': 5}
+
+
+def get_attackers_to_square(board, sq, by_white):
+    """
+    Find all pieces of one side attacking a square.
+    Returns list of (attacker_square, piece_type) sorted by piece value (LVA).
+    """
+    attackers = []
+
+    if by_white:
+        # White pieces attack (uppercase)
+        # Pawns attack diagonally from south
+        for d in (S + W, S + E):
+            src = sq + d
+            if 0 <= src < 120 and board[src] == 'P':
+                attackers.append((src, 'P'))
+
+        # Knights
+        for d in directions['N']:
+            src = sq + d
+            if 0 <= src < 120 and board[src] == 'N':
+                attackers.append((src, 'N'))
+
+        # Bishops/Queens (diagonals)
+        for d in directions['B']:
+            for dist in range(1, 8):
+                src = sq + d * dist
+                if src < 0 or src >= 120 or board[src].isspace():
+                    break
+                if board[src] == 'B' or board[src] == 'Q':
+                    attackers.append((src, board[src]))
+                    break
+                if board[src] != '.':
+                    break
+
+        # Rooks/Queens (orthogonals)
+        for d in directions['R']:
+            for dist in range(1, 8):
+                src = sq + d * dist
+                if src < 0 or src >= 120 or board[src].isspace():
+                    break
+                if board[src] == 'R' or board[src] == 'Q':
+                    attackers.append((src, board[src]))
+                    break
+                if board[src] != '.':
+                    break
+
+        # King
+        for d in directions['K']:
+            src = sq + d
+            if 0 <= src < 120 and board[src] == 'K':
+                attackers.append((src, 'K'))
+    else:
+        # Black pieces attack (lowercase)
+        # Pawns attack diagonally from north
+        for d in (N + W, N + E):
+            src = sq + d
+            if 0 <= src < 120 and board[src] == 'p':
+                attackers.append((src, 'p'))
+
+        # Knights
+        for d in directions['N']:
+            src = sq + d
+            if 0 <= src < 120 and board[src] == 'n':
+                attackers.append((src, 'n'))
+
+        # Bishops/Queens (diagonals)
+        for d in directions['B']:
+            for dist in range(1, 8):
+                src = sq + d * dist
+                if src < 0 or src >= 120 or board[src].isspace():
+                    break
+                if board[src] == 'b' or board[src] == 'q':
+                    attackers.append((src, board[src]))
+                    break
+                if board[src] != '.':
+                    break
+
+        # Rooks/Queens (orthogonals)
+        for d in directions['R']:
+            for dist in range(1, 8):
+                src = sq + d * dist
+                if src < 0 or src >= 120 or board[src].isspace():
+                    break
+                if board[src] == 'r' or board[src] == 'q':
+                    attackers.append((src, board[src]))
+                    break
+                if board[src] != '.':
+                    break
+
+        # King
+        for d in directions['K']:
+            src = sq + d
+            if 0 <= src < 120 and board[src] == 'k':
+                attackers.append((src, 'k'))
+
+    # Sort by piece value (least valuable first - LVA)
+    attackers.sort(key=lambda x: SEE_PIECE_ORDER.get(x[1], 6))
+    return attackers
+
+
+def get_xray_attacker(board, sq, from_sq, by_white):
+    """
+    After removing piece at from_sq, check if there's an x-ray attacker behind it.
+    Returns (attacker_square, piece_type) or None.
+    """
+    # Determine direction from sq to from_sq
+    diff = from_sq - sq
+
+    # Normalize to get direction
+    if diff == 0:
+        return None
+
+    # Check if it's a valid sliding direction
+    direction = None
+    for d in (N, S, E, W, N + E, N + W, S + E, S + W):
+        if diff % d == 0 and diff // d > 0:
+            steps = diff // d
+            # Verify it's actually this direction
+            if sq + d * steps == from_sq:
+                direction = d
+                break
+
+    if direction is None:
+        return None
+
+    # Check for pieces along this ray beyond from_sq
+    for dist in range(1, 8):
+        check_sq = from_sq + direction * dist
+        if check_sq < 0 or check_sq >= 120 or board[check_sq].isspace():
+            break
+
+        piece = board[check_sq]
+        if piece == '.':
+            continue
+
+        is_white_piece = piece.isupper()
+        if is_white_piece != by_white:
+            break  # Enemy piece blocks
+
+        # Check if this piece can attack along this direction
+        piece_upper = piece.upper()
+        is_diagonal = direction in (N + E, N + W, S + E, S + W)
+        is_orthogonal = direction in (N, S, E, W)
+
+        if piece_upper == 'Q':
+            return (check_sq, piece)
+        if piece_upper == 'B' and is_diagonal:
+            return (check_sq, piece)
+        if piece_upper == 'R' and is_orthogonal:
+            return (check_sq, piece)
+
+        break  # Piece blocks but doesn't attack
+
+    return None
+
+
+def see(pos, move):
+    """
+    Static Exchange Evaluation for a capture move.
+    Returns expected material gain/loss in centipawns from the moving side's perspective.
+
+    Positive = winning exchange, Negative = losing exchange
+    """
+    i, j, prom = move
+    board = list(pos.board)  # Mutable copy
+
+    # Handle special cases
+    # En passant
+    if pos.board[i].upper() == 'P' and j == pos.ep:
+        # Captured pawn is on a different square
+        captured_sq = j + S if pos.board[i].isupper() else j + N
+        captured_value = SEE_VALUES['P']
+        board[captured_sq] = '.'
+    # King passant (sunfish special)
+    elif abs(j - pos.kp) < 2 and pos.kp != 0:
+        captured_value = SEE_VALUES['K']
+    else:
+        captured_value = SEE_VALUES[board[j]]
+
+    # Promotion bonus
+    if prom:
+        prom_bonus = SEE_VALUES[prom] - SEE_VALUES['P']
+    else:
+        prom_bonus = 0
+
+    attacker = board[i]
+    attacker_value = SEE_VALUES[attacker]
+
+    # If capturing nothing and no promotion, it's not a capture
+    if captured_value == 0 and not prom:
+        return 0
+
+    # Simulate the capture
+    board[j] = attacker if not prom else prom
+    board[i] = '.'
+
+    # Track gains - index 0 is initial capture
+    gains = [captured_value + prom_bonus]
+
+    # Current piece on target square
+    piece_on_square = attacker_value if not prom else SEE_VALUES[prom]
+
+    # Alternating sides
+    side_to_move_is_white = not attacker.isupper()  # Opponent moves next
+
+    # Build attacker lists for both sides
+    depth = 0
+    max_depth = 32
+
+    while depth < max_depth:
+        # Get attackers for current side
+        attackers = get_attackers_to_square(''.join(board), j, side_to_move_is_white)
+
+        if not attackers:
+            break
+
+        # Pick least valuable attacker
+        atk_sq, atk_piece = attackers[0]
+        atk_value = SEE_VALUES[atk_piece]
+
+        # Record the gain (capturing what's on the square)
+        gains.append(piece_on_square)
+
+        # Check for x-ray attackers behind this piece
+        xray = get_xray_attacker(''.join(board), j, atk_sq, side_to_move_is_white)
+
+        # Make the capture
+        board[j] = atk_piece
+        board[atk_sq] = '.'
+
+        piece_on_square = atk_value
+        side_to_move_is_white = not side_to_move_is_white
+        depth += 1
+
+    # Negamax the gains array
+    while len(gains) > 1:
+        gains[-2] = gains[-2] - max(0, gains[-1])
+        gains.pop()
+
+    return gains[0]
+
+
+def see_capture_is_good(pos, move, threshold=0):
+    """Quick check if a capture has SEE >= threshold."""
+    return see(pos, move) >= threshold
 
 
 ###############################################################################
@@ -278,6 +559,43 @@ class Position(namedtuple("Position", "board score wc bc ep kp myhash")):
                         yield Move(j + E, j + W, "")
                     if i == H1 and self.board[j + W] == "K" and self.wc[1]:
                         yield Move(j + W, j + E, "")
+
+    def gen_captures(self):
+        """Generate only capture moves (for quiescence)."""
+        for i, p in enumerate(self.board):
+            if not p.isupper():
+                continue
+            for d in directions[p]:
+                for j in count(i + d, d):
+                    q = self.board[j]
+                    if q.isspace() or q.isupper():
+                        break
+                    if p == "P":
+                        if d in (N, N + N) and q != ".":
+                            break
+                        if d == N + N and (i < A1 + N or self.board[i + N] != "."):
+                            break
+                        if d in (N + W, N + E):
+                            # Only yield if actual capture or en passant
+                            if q == "." and j not in (self.ep, self.kp, self.kp - 1, self.kp + 1):
+                                break
+                            # This is a capture
+                            if A8 <= j <= H8:
+                                yield from (Move(i, j, prom) for prom in "NBRQ")
+                            else:
+                                yield Move(i, j, "")
+                            break
+                        # Non-capture pawn moves - skip in quiescence except promotions
+                        if d == N and A8 <= j <= H8:
+                            yield from (Move(i, j, prom) for prom in "NBRQ")
+                        break
+                    # Non-pawn pieces
+                    if q.islower() or abs(j - self.kp) < 2:
+                        # Capture
+                        yield Move(i, j, "")
+                        break
+                    if p in "NK":
+                        break
 
     def rotate(self, nullmove=False, skip_score=False):
         # Rotates the board, preserving enpassant.
@@ -392,39 +710,93 @@ class Position(namedtuple("Position", "board score wc bc ep kp myhash")):
         # only. Well, captures plus promotions.
         return self.board[move.j] != "." or abs(move.j - self.kp) < 2 or move.prom
 
+    def is_quiet(self, move):
+        return self.board[move.j] == "." and not move.prom and abs(move.j - self.kp) >= 2
+
     def hash(self):
         return self.myhash
+
+
+Entry = namedtuple("Entry", "lower upper")
+
+
+@lru_cache(maxsize=50000)
+def is_in_check_cached(board_hash, board, ep, kp):
+    """Cached check detection."""
+    # Find our king
+    king_sq = None
+    for i, c in enumerate(board):
+        if c == 'K':
+            king_sq = i
+            break
+
+    if king_sq is None:
+        return True  # No king = effectively in check
+
+    # Check if any enemy piece attacks our king
+    # Pawns
+    for d in (N + W, N + E):
+        sq = king_sq + d
+        if 0 <= sq < 120 and board[sq] == 'p':
+            return True
+
+    # Knights
+    for d in directions['N']:
+        sq = king_sq + d
+        if 0 <= sq < 120 and board[sq] == 'n':
+            return True
+
+    # Bishops/Queens (diagonals)
+    for d in directions['B']:
+        for dist in range(1, 8):
+            sq = king_sq + d * dist
+            if sq < 0 or sq >= 120:
+                break
+            c = board[sq]
+            if c.isspace():
+                break
+            if c in ('b', 'q'):
+                return True
+            if c != '.':
+                break
+
+    # Rooks/Queens (orthogonals)
+    for d in directions['R']:
+        for dist in range(1, 8):
+            sq = king_sq + d * dist
+            if sq < 0 or sq >= 120:
+                break
+            c = board[sq]
+            if c.isspace():
+                break
+            if c in ('r', 'q'):
+                return True
+            if c != '.':
+                break
+
+    # King
+    for d in directions['K']:
+        sq = king_sq + d
+        if 0 <= sq < 120 and board[sq] == 'k':
+            return True
+
+    return False
+
+
+def is_in_check(pos):
+    """Check if current side to move is in check."""
+    return is_in_check_cached(pos.hash(), pos.board, pos.ep, pos.kp)
 
 
 ###############################################################################
 # Search logic
 ###############################################################################
 
-Entry = namedtuple("Entry", "lower upper")
-
 PIECE_VALUES = {
     'P': 100, 'N': 320, 'B': 330, 'R': 500, 'Q': 900, 'K': 20000,
     'p': 100, 'n': 320, 'b': 330, 'r': 500, 'q': 900, 'k': 20000,
     '.': 0
 }
-
-
-def is_in_check(pos):
-    """
-    Proper check detection: flip the board and see if opponent
-    can capture our king (king capture is available as a move)
-    """
-    # Flip the position to opponent's perspective
-    flipped = pos.rotate(nullmove=True, skip_score=True)
-
-    # Check if opponent has a king capture available
-    # Must check BOTH: direct capture of 'k' AND king passant (kp)
-    for move in flipped.gen_moves():
-        if flipped.board[move.j] == 'k' or abs(move.j - flipped.kp) < 2:
-            # logging.info(f"in check at pos {position_to_fen(pos)}")
-            return True
-
-    return False
 
 
 def futility_margin(depth, improving):
@@ -434,13 +806,13 @@ def futility_margin(depth, improving):
     Margins should be ~5-15% of eval range
     """
     base_margins = {
-        1: 300,  # ~1 pawn
-        2: 650,  # ~1.5 pawns
-        3: 900,  # ~2 pawns
-        4: 1100,  # ~2.5 pawns
+        1: 100,
+        2: 250,
+        3: 600,
+        4: 850,
     }
 
-    margin = base_margins.get(depth, 1200)
+    margin = base_margins.get(depth, 850 + depth * 100)
 
     # Adjust for improving: more conservative when declining
     if not improving:
@@ -535,7 +907,6 @@ class Searcher:
         self.history_max = max(self.history_max // 2, 1)
 
     def quiesce(self, pos, alpha, beta, ply=0):
-        """Quiescence search - captures only with delta pruning"""
         self.nodes += 1
 
         # Stand pat
@@ -545,35 +916,33 @@ class Searcher:
         if alpha < stand_pat:
             alpha = stand_pat
 
-        if ply >= 5:
+        # Depth limit for quiescence
+        if ply >= 12:
             return alpha
 
-        # Delta pruning margin (scaled for NNUE: ~1.5 queens)
-        delta_margin = 1850
+        # Generate captures only using dedicated generator
+        captures = list(pos.gen_captures())
 
-        # Generate captures only
-        captures = [m for m in pos.gen_moves() if pos.is_capture(m)]
-
-        # Sort by MVV-LVA + history
+        # Score captures using SEE
         def capture_score(m):
-            # MVV-LVA
+            see_val = see(pos, m)
+            # MVV-LVA as tiebreaker
             if abs(m.j - pos.kp) >= 2:
                 mvv_lva = PIECE_VALUES[pos.board[m.j]] * 10 - PIECE_VALUES[pos.board[m.i]]
             else:
                 mvv_lva = MATE
-
-            # History contribution (scaled appropriately)
-            history = self.get_history_score(m)
-            history_bonus = (history * 1500) // max(self.history_max, 1)
-
-            return -(mvv_lva + history_bonus)
+            return -(see_val * 1000 + mvv_lva)
 
         captures.sort(key=capture_score)
 
         for move in captures:
-            # Delta pruning: skip captures that can't possibly raise alpha
-            captured_value = PIECE_VALUES[pos.board[move.j]] if abs(move.j - pos.kp) >= 2 else 0
-            if stand_pat + captured_value + delta_margin < alpha:
+            # SEE pruning: skip losing captures
+            see_val = see(pos, move)
+            if see_val < 0:
+                continue  # Skip losing captures entirely
+
+            # Delta pruning with SEE value
+            if stand_pat + see_val + 50 < alpha:
                 continue
 
             score = -self.quiesce(pos.move(move), -beta, -alpha, ply + 1)
@@ -672,8 +1041,7 @@ class Searcher:
                 not in_check and
                 not near_mate):
 
-            # Razoring margins (scaled for NNUE: ~1.5 pawns + depth scaling)
-            razor_margin = 900 + 600 * depth
+            razor_margin = 300 + 200 * depth
 
             if eval_score + razor_margin < gamma:
                 # Position looks hopeless, verify with qsearch
@@ -684,7 +1052,7 @@ class Searcher:
         # ==== REVERSE FUTILITY PRUNING (Static Null Move) ====
         # Prune if position is too good (opponent can't save it)
         if (not root and
-                depth <= 4 and
+                depth <= 6 and
                 not in_check and
                 not near_mate):
 
@@ -701,7 +1069,7 @@ class Searcher:
         # Prepare to skip quiet moves in hopeless positions
         futility_pruning = False
         if (not root and
-                depth <= 4 and
+                depth <= 8 and
                 not in_check and
                 not near_mate):
 
@@ -719,25 +1087,22 @@ class Searcher:
         all_moves = list(pos.gen_moves())
 
         def move_score(m):
-            """Score moves for ordering: captures first (MVV-LVA), then history"""
-            # MVV-LVA for captures
-            if pos.board[m.j] != '.' or abs(m.j - pos.kp) < 2:
-                if abs(m.j - pos.kp) >= 2:
-                    capture_value = (PIECE_VALUES[pos.board[m.j]] * 10 -
-                                     PIECE_VALUES[pos.board[m.i]])
+            is_cap = pos.is_capture(m)
+            if is_cap:
+                # Use SEE for captures
+                see_val = see(pos, m)
+                # Good captures first (high SEE), then equal, then losing
+                if see_val >= 0:
+                    return -(10000000 + see_val)  # Good captures
                 else:
-                    capture_value = MATE
+                    return -see_val  # Losing captures (negative SEE -> positive score -> later)
             else:
-                capture_value = 0
+                # Quiet moves: use history
+                history = self.get_history_score(m)
+                history_normalized = (history * 2000) // max(self.history_max, 1)
+                return -history_normalized
 
-            # History score (normalized to reasonable scale)
-            history = self.get_history_score(m)
-            history_normalized = (history * 2000) // max(self.history_max, 1)
-
-            return -(capture_value + history_normalized)
-
-            # Sort all moves by score
-
+        # Sort all moves by score
         all_moves.sort(key=move_score)
 
         # Prioritize killer move if it exists
@@ -748,16 +1113,39 @@ class Searcher:
         # ==== MAIN SEARCH LOOP ====
         best = -MATE_UPPER
         moves_searched = 0
+        quiet_moves_searched = 0
         searched_moves = []  # Track all searched moves for history update
 
         for move in all_moves:
-            # Forward futility pruning: skip quiet moves in hopeless positions
-            if (futility_pruning and
-                    not pos.is_capture(move) and
-                    not move.prom):
+            is_capture = pos.is_capture(move)
+            is_quiet = pos.is_quiet(move)
+
+            # Late Move Pruning (LMP)
+            if (not root and depth <= 8 and not in_check and is_quiet and
+                    quiet_moves_searched >= LMP_TABLE.get((depth, improving), 64)):
                 continue
 
+                # Futility pruning for quiet moves
+            if futility_pruning and is_quiet and not move.prom:
+                quiet_moves_searched += 1
+                continue
+
+                # SEE pruning for captures at shallow depth
+            if not root and depth <= 5 and is_capture and not move.prom:
+                if see(pos, move) < -50 * depth * depth:
+                    continue
+
+                    # SEE pruning for quiet moves (is destination safe?)
+            if not root and depth <= 4 and is_quiet and not in_check:
+                # Check if moving piece to destination loses material
+                test_move = Move(move.i, move.j, "")
+                if see(pos, test_move) < -100 * depth:
+                    quiet_moves_searched += 1
+                    continue
+
             moves_searched += 1
+            if is_quiet:
+                quiet_moves_searched += 1
             searched_moves.append(move)
 
             # ==== LATE MOVE REDUCTION (LMR) ====
@@ -766,13 +1154,9 @@ class Searcher:
             # LMR conditions
             if (not root and
                     depth >= 3 and
-                    moves_searched >= 3 and  # Skip first 2 moves
-                    not pos.is_capture(move) and
-                    not move.prom and
-                    not in_check):
+                    moves_searched >= 2 and not in_check and is_quiet):
 
                 # Base reduction using logarithmic formula
-                import math
                 base_reduction = 0.75 + math.log(depth) * math.log(moves_searched) * 0.5
                 reduction = int(base_reduction)
                 reduction = max(1, min(reduction, depth - 2))
