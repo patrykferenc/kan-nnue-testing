@@ -1,0 +1,44 @@
+{
+  "metadata": {
+    "engine_path": "/workspace/nnue-pytorch/cmds/experiments/experiments/experiment_experiment_baseline-20250708_060922/stockfish_base/src/stockfish",
+    "net_path": null,
+    "data_path": "/workspace/nnue-pytorch/mydata/T60T70wIsRightFarseer.binpack",
+    "checkpoint_path": "/workspace/my-nnue-pytorch/mystuff/experiments/experiment_refactored_kan_early_iteration_g3_k3_3072_15_32-20251019_194115/training/run_0/lightning_logs/version_0/checkpoints/epoch-599-step=366600.ckpt",
+    "model_name": "sfnnvkan_g3_k3_3072_15_32_mlp",
+    "positions_evaluated": 10167,
+    "batch_size": 1000
+  },
+  "statistics": {
+    "engine_stats": {
+      "min": -4008,
+      "max": 4130,
+      "avg": 19.757844005114585,
+      "avg_abs": 284.98868889544605
+    },
+    "model_stats": {
+      "min": -6828.5693359375,
+      "max": 6973.81103515625,
+      "avg": 6.12994787582104,
+      "avg_abs": 381.4327806255582
+    },
+    "error_metrics": {
+      "relative_engine_error": 2.8297905912716868,
+      "relative_model_error": 582.9907824576973,
+      "avg_abs_difference": 254.85269628380607,
+      "min_difference": 0.11469268798828125,
+      "max_difference": 3666.81103515625
+    },
+    "correlations": {
+      "pearson": {
+        "coefficient": 0.856618004880408,
+        "p_value": 0.0
+      },
+      "spearman": {
+        "coefficient": 0.6770510189720073,
+        "p_value": 0.0
+      },
+      "r_squared": 0.7337944062852906
+    }
+  },
+  "timestamp": "20251026_184840"
+}
