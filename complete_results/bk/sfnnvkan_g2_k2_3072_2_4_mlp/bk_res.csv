@@ -1,0 +1,25 @@
+fen,id,expected_bm,expected_am,given_move,bm_success,am_success,time_s,score
+1k1r4/pp1b1R2/3q2pp/4p3/2B5/4Q3/PPP2B2/2K5 b - - 0 1,BK.01,[Move.from_uci('d6d1')],[],d6d1,True,,83.312,+1602
+3r1k2/4npp1/1ppr3p/p6P/P2PPPP1/1NR5/5K2/2R5 w - - 0 1,BK.02,[Move.from_uci('d4d5')],[],c3c2,False,,549.266,-57
+2q1rr1k/3bbnnp/p2p1pp1/2pPp3/PpP1P1P1/1P2BNNP/2BQ1PRK/7R b - - 0 1,BK.03,[Move.from_uci('f6f5')],[],f7g5,False,,990.169,-70
+rnbqkb1r/p3pppp/1p6/2ppP3/3N4/2P5/PPP1QPPP/R1B1KB1R w KQkq - 0 1,BK.04,[Move.from_uci('e5e6')],[],e2f3,False,,376.397,+227
+r1b2rk1/2q1b1pp/p2ppn2/1p6/3QP3/1BN1B3/PPP3PP/R4RK1 w - - 0 1,BK.05,"[Move.from_uci('c3d5'), Move.from_uci('a2a4')]",[],d4c4,False,,1470.316,+193
+2r3k1/pppR1pp1/4p3/4P1P1/5P2/1P4K1/P1P5/8 w - - 0 1,BK.06,[Move.from_uci('g5g6')],[],g5g6,True,,141.536,+408
+1nk1r1r1/pp2n1pp/4p3/q2pPp1N/b1pP1P2/B1P2R2/2P1B1PP/R2Q2K1 w - - 0 1,BK.07,[Move.from_uci('h5f6')],[],a3b4,False,,954.924,+33
+4b3/p3kp2/6p1/3pP2p/2pP1P2/4K1P1/P3N2P/8 w - - 0 1,BK.08,[Move.from_uci('f4f5')],[],f4f5,True,,118.155,+20
+2kr1bnr/pbpq4/2n1pp2/3p3p/3P1P1B/2N2N1Q/PPP3PP/2KR1B1R w - - 0 1,BK.09,[Move.from_uci('f4f5')],[],h3e6,False,,639.461,+95
+3rr1k1/pp3pp1/1qn2np1/8/3p4/PP1R1P2/2P1NQPP/R1B3K1 b - - 0 1,BK.10,[Move.from_uci('c6e5')],[],b6c5,False,,1708.83,-7
+2r1nrk1/p2q1ppp/bp1p4/n1pPp3/P1P1P3/2PBB1N1/4QPPP/R4RK1 w - - 0 1,BK.11,[Move.from_uci('f2f4')],[],e2h5,False,,502.921,+312
+r3r1k1/ppqb1ppp/8/4p1NQ/8/2P5/PP3PPP/R3R1K1 b - - 0 1,BK.12,[Move.from_uci('d7f5')],[],d7f5,True,,425.222,-817
+r2q1rk1/4bppp/p2p4/2pP4/3pP3/3Q4/PP1B1PPP/R3R1K1 w - - 0 1,BK.13,[Move.from_uci('b2b4')],[],e4e5,False,,244.857,+239
+rnb2r1k/pp2p2p/2pp2p1/q2P1p2/8/1Pb2NP1/PB2PPBP/R2Q1RK1 w - - 0 1,BK.14,"[Move.from_uci('d1d2'), Move.from_uci('d1e1')]",[],d1d4,False,,315.334,+500
+2r3k1/1p2q1pp/2b1pr2/p1pp4/6Q1/1P1PP1R1/P1PN2PP/5RK1 w - - 0 1,BK.15,[Move.from_uci('g4g7')],[],f1f6,False,,207.635,+435
+r1bqkb1r/4npp1/p1p4p/1p1pP1B1/8/1B6/PPPN1PPP/R2Q1RK1 w kq - 0 1,BK.16,[Move.from_uci('d2e4')],[],d2e4,True,,938.354,+260
+r2q1rk1/1ppnbppp/p2p1nb1/3Pp3/2P1P1P1/2N2N1P/PPB1QP2/R1B2RK1 b - - 0 1,BK.17,[Move.from_uci('h7h5')],[],d7b8,False,,1114.783,-60
+r1bq1rk1/pp2ppbp/2np2p1/2n5/P3PP2/N1P2N2/1PB3PP/R1B1QRK1 b - - 0 1,BK.18,[Move.from_uci('c5b3')],[],c6d4,False,,1610.448,-35
+3rr3/2pq2pk/p2p1pnp/8/2QBPP2/1P6/P5PP/4RRK1 b - - 0 1,BK.19,[Move.from_uci('e8e4')],[],d6d5,False,,2992.458,-125
+r4k2/pb2bp1r/1p1qp2p/3pNp2/3P1P2/2N3P1/PPP1Q2P/2KRR3 w - - 0 1,BK.20,[Move.from_uci('g3g4')],[],e2g4,False,,259.081,+170
+3rn2k/ppb2rpp/2ppqp2/5N2/2P1P3/1P5Q/PB3PPP/3RR1K1 w - - 0 1,BK.21,[Move.from_uci('f5h6')],[],b3b4,False,,1273.511,+555
+2r2rk1/1bqnbpp1/1p1ppn1p/pP6/N1P1P3/P2B1N1P/1B2QPP1/R2R2K1 b - - 0 1,BK.22,[Move.from_uci('b7e4')],[],h6h5,False,,1335.3,+9
+r1bqk2r/pp2bppp/2p5/3pP3/P2Q1P2/2N1B3/1PP3PP/R4RK1 b kq - 0 1,BK.23,[Move.from_uci('f7f6')],[],e8f8,False,,3435.875,-155
+r2qnrnk/p2b2b1/1p1p2pp/2pPpp2/1PP1P3/PRNBB3/3QNPPP/5RK1 w - - 0 1,BK.24,[Move.from_uci('f2f4')],[],c3a2,False,,4405.353,+28

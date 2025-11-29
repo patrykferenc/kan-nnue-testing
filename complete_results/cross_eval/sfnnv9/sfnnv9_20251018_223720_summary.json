@@ -1,0 +1,44 @@
+{
+  "metadata": {
+    "engine_path": "/home/patryk/msc/nnue-pytorch/mystuff/experiments/experiment_baseline-20250707_141503/stockfish_base/src/stockfish",
+    "net_path": "/home/patryk/msc/nnue-pytorch/mystuff/experiments/experiment_baseline-20250707_141503/training/run_0/nn-epoch619.nnue",
+    "data_path": "/home/patryk/msc/data/T60T70wIsRightFarseer.binpack",
+    "checkpoint_path": "/home/patryk/msc/nnue-pytorch/mystuff/experiments/experiment_baseline-20250707_141503/training/run_0/lightning_logs/version_0/checkpoints/last.ckpt",
+    "model_name": "sfnnv9",
+    "positions_evaluated": 10170,
+    "batch_size": 1000
+  },
+  "statistics": {
+    "engine_stats": {
+      "min": -4031,
+      "max": 3723,
+      "avg": 9.803441494591937,
+      "avg_abs": 231.5660766961652
+    },
+    "model_stats": {
+      "min": -7076.314453125,
+      "max": 7023.29931640625,
+      "avg": 0.19685408072720118,
+      "avg_abs": 377.9614055039491
+    },
+    "error_metrics": {
+      "relative_engine_error": 6.640943093037889,
+      "relative_model_error": 965.7291800423475,
+      "avg_abs_difference": 253.28422668418585,
+      "min_difference": 0.180389404296875,
+      "max_difference": 4231.70849609375
+    },
+    "correlations": {
+      "pearson": {
+        "coefficient": 0.8654295176083726,
+        "p_value": 0.0
+      },
+      "spearman": {
+        "coefficient": 0.7002351337841478,
+        "p_value": 0.0
+      },
+      "r_squared": 0.7489682499478605
+    }
+  },
+  "timestamp": "20251018_223720"
+}
