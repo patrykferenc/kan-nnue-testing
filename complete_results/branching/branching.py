@@ -50,11 +50,11 @@ ax = sns.lineplot(data=model_data, x="depth", y="branching_factor", hue="model",
 if not stock_df.empty:
     ax.plot(stock_df["depth"], stock_df["branching_factor"],
             marker='s', linewidth=2, markersize=4, linestyle='--',
-            color='black', label='Stockfish', zorder=10)
+            color='black', label='Stockfish 17.1', zorder=10)
 
-plt.title("Branching Factor vs Depth")
-plt.xlabel("Depth")
-plt.ylabel("Branching Factor")
+plt.title("Branching Factor w zależności od głębokości wyszukiwania")
+plt.xlabel("Głębokość")
+plt.ylabel("BF")
 plt.legend(title="Model", loc="lower left")
 plt.tight_layout()
 plt.savefig('branching_plot.svg', format='svg', bbox_inches='tight', dpi=300)
