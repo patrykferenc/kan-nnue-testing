@@ -213,6 +213,8 @@ results
 test_results_2
 test_results_kanik
 
+*.bak/
+
 **/*.bak
 
 **/*.Identifier

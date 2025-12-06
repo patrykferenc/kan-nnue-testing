@@ -623,6 +623,11 @@ class Best(Command):
         )
         add_limit_argument(parser)
         add_skip_argument(parser)
+        parser.add_argument(
+            "--clean-epd",
+            action="store_true",
+            help="Remove problematic data from the EPD file",
+        )
 
     @classmethod
     async def run(cls, engine, args):
@@ -640,7 +645,14 @@ class Best(Command):
                             'bm_success', 'am_success', 'time_s', 'score']) as writer:
 
             for line in (pb := tqdm.tqdm(lines)):
-                board, opts = chess.Board.from_epd(line)
+                if args.clean_epd:
+                    parts = line.strip().split()
+                    if len(parts) >= 6 and parts[4].isdigit() and parts[5].split()[0].isdigit():
+                        # Reconstruct without the FEN-specific fields
+                        line = ' '.join(parts[:4] + parts[6:])
+                    board, opts = chess.Board.from_epd(line)
+                else:
+                    board, opts = chess.Board.from_epd(line)
                 if "pv" in opts:
                     for move in opts["pv"]:
                         board.push(move)
