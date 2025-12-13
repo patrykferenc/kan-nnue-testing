@@ -7,23 +7,17 @@ Runs games between two networks and calculates Elo differences
 import argparse
 import asyncio
 import json
-import os
 import sys
 import time
-from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, Tuple
-import subprocess
-import random
+from typing import Dict, List, Tuple, Optional
 
 import chess
 import chess.engine
 import chess.pgn
 from tqdm import tqdm
 
-# LOGS
-# Generate a small random id once per process/run
 import random
 import logging
 
@@ -35,7 +29,6 @@ logging.basicConfig(
     format="%(asctime)s %(levelname)s [id=%(rid)02d] %(message)s",
 )
 
-# Ensure every LogRecord gets the same run id
 _old_factory = logging.getLogRecordFactory()
 
 
@@ -49,12 +42,17 @@ def _attach_run_id_factory(*args, **kwargs):
 logging.setLogRecordFactory(_attach_run_id_factory)
 
 
-# Result tracking
+def log_problematic_position(fen: str, reason: str):
+    """Log positions where engine failed, for later debugging"""
+    with open("problematic_positions.log", "a") as f:
+        f.write(f"{datetime.now().isoformat()} | {reason} | {fen}\n")
+
+
 class GameResult:
     def __init__(self, white_network: str, black_network: str, result: str, pgn: str = ""):
         self.white_network = white_network
         self.black_network = black_network
-        self.result = result  # "1-0", "0-1", "1/2-1/2"
+        self.result = result
         self.pgn = pgn
         self.timestamp = datetime.now().isoformat()
 
@@ -73,174 +71,201 @@ class NetworkTester:
         self.engine_path = Path(engine_path).absolute()
         self.args = args
         self.results: List[GameResult] = []
+        # Persistent engine instances
+        self.engine_a: Optional[chess.engine.UciProtocol] = None
+        self.engine_b: Optional[chess.engine.UciProtocol] = None
+        self.network_a_info: Optional[Tuple[str, str, str]] = None
+        self.network_b_info: Optional[Tuple[str, str, str]] = None
 
     def make_engine_cmd(self, model_name: str, model_path: str) -> List[str]:
-        """Create command to run sunfish_nnue with specific network"""
         cmd = [
             sys.executable,
             str(self.engine_path),
             model_name,
             model_path,
-            str(self.args.batch_size),
             self.args.compile_mode
         ]
         if self.args.book_path:
             cmd.append(self.args.book_path)
         return cmd
 
-    async def play_game(self, network_a: Tuple[str, str, str],
-                        network_b: Tuple[str, str, str],
-                        white_is_a: bool) -> GameResult:
-        """Play a single game between two networks
+    async def start_engines(self, network_a: Tuple[str, str, str],
+                            network_b: Tuple[str, str, str]):
+        """Start both engines once - they will be reused for all games"""
+        print("Starting engines (this may take a while due to model loading)...")
+
+        self.network_a_info = network_a
+        self.network_b_info = network_b
+
+        cmd_a = self.make_engine_cmd(network_a[1], network_a[2])
+        cmd_b = self.make_engine_cmd(network_b[1], network_b[2])
+
+        start = time.time()
+        _, self.engine_a = await chess.engine.popen_uci(cmd_a)
+        print(f"  Engine A ({network_a[0]}) started in {time.time() - start:.1f}s")
+
+        start = time.time()
+        _, self.engine_b = await chess.engine.popen_uci(cmd_b)
+        print(f"  Engine B ({network_b[0]}) started in {time.time() - start:.1f}s")
+
+    async def stop_engines(self):
+        """Stop both engines"""
+        if self.engine_a:
+            await self.engine_a.quit()
+            self.engine_a = None
+        if self.engine_b:
+            await self.engine_b.quit()
+            self.engine_b = None
+
+    async def play_game(self, white_is_a: bool) -> GameResult:
+        """Play a single game using the persistent engines
 
         Args:
-            network_a: (name, model_name, model_path)
-            network_b: (name, model_name, model_path)
-            white_is_a: True if network_a plays white
+            white_is_a: True if engine_a (network_a) plays white
         """
-        white_net = network_a if white_is_a else network_b
-        black_net = network_b if white_is_a else network_a
+        if white_is_a:
+            white_engine = self.engine_a
+            black_engine = self.engine_b
+            white_name = self.network_a_info[0]
+            black_name = self.network_b_info[0]
+        else:
+            white_engine = self.engine_b
+            black_engine = self.engine_a
+            white_name = self.network_b_info[0]
+            black_name = self.network_a_info[0]
 
-        # Create engines
-        white_cmd = self.make_engine_cmd(white_net[1], white_net[2])
-        black_cmd = self.make_engine_cmd(black_net[1], black_net[2])
+        board = chess.Board()
+        game = chess.pgn.Game()
+        node = game
 
-        # Start engines
-        _, white_engine = await chess.engine.popen_uci(white_cmd)
-        _, black_engine = await chess.engine.popen_uci(black_cmd)
+        # Apply opening book moves if specified
+        if self.args.opening_moves:
+            for move_uci in self.args.opening_moves.split():
+                move = chess.Move.from_uci(move_uci)
+                board.push(move)
+                node = node.add_variation(move)
 
-        try:
-            board = chess.Board()
-            game = chess.pgn.Game()
-            node = game
+        # Play the game
+        move_count = 0
+        while not board.is_game_over() and move_count < self.args.max_moves:
+            engine = white_engine if board.turn == chess.WHITE else black_engine
 
-            # Apply opening book moves if specified
-            if self.args.opening_moves:
-                for move_uci in self.args.opening_moves.split():
-                    move = chess.Move.from_uci(move_uci)
-                    board.push(move)
-                    node = node.add_variation(move)
+            if self.args.nodes:
+                limit = chess.engine.Limit(nodes=self.args.nodes)
+            elif self.args.movetime:
+                limit = chess.engine.Limit(time=self.args.movetime / 1000)
+            elif self.args.depth:
+                limit = chess.engine.Limit(depth=self.args.depth)
+            else:
+                limit = chess.engine.Limit(nodes=10000)
 
-            # Play the game
-            move_count = 0
-            while not board.is_game_over() and move_count < self.args.max_moves:
-                engine = white_engine if board.turn == chess.WHITE else black_engine
+            result = await engine.play(board, limit)
 
-                # Set time control
-                if self.args.nodes:
-                    limit = chess.engine.Limit(nodes=self.args.nodes)
-                elif self.args.movetime:
-                    limit = chess.engine.Limit(time=self.args.movetime / 1000)
-                elif self.args.depth:
-                    limit = chess.engine.Limit(depth=self.args.depth)
-                else:
-                    limit = chess.engine.Limit(nodes=10000)
+            # Handle engine returning no move (uhjh)
+            if result.move is None:
+                fen = board.fen()
+                logging.warning(f"Engine returned None move at position: {fen}")
+                log_problematic_position(fen, "None move")
+                return None  # Abort this game
 
-                logging.info(f"Playing move {move_count + 1}, using limit {limit}")
+            board.push(result.move)
+            node = node.add_variation(result.move)
+            move_count += 1
 
-                result = await engine.play(board, limit)
-                board.push(result.move)
-                node = node.add_variation(result.move)
-                move_count += 1
-
-            # Get game result
-            if board.is_checkmate():
-                result_str = "1-0" if board.turn == chess.BLACK else "0-1"
-            elif board.is_stalemate() or board.is_insufficient_material():
-                result_str = "1/2-1/2"
-            elif board.is_seventyfive_moves() or board.is_fivefold_repetition():
-                result_str = "1/2-1/2"
-            elif move_count >= self.args.max_moves:
-                # Adjudicate by material count
-                material = self._count_material(board)
-                if abs(material) >= self.args.adjudicate_threshold:
-                    result_str = "1-0" if material > 0 else "0-1"
-                else:
-                    result_str = "1/2-1/2"
+        # Get game result
+        if board.is_checkmate():
+            result_str = "1-0" if board.turn == chess.BLACK else "0-1"
+        elif board.is_stalemate() or board.is_insufficient_material():
+            result_str = "1/2-1/2"
+        elif board.is_seventyfive_moves() or board.is_fivefold_repetition():
+            result_str = "1/2-1/2"
+        elif move_count >= self.args.max_moves:
+            material = self._count_material(board)
+            if abs(material) >= self.args.adjudicate_threshold:
+                result_str = "1-0" if material > 0 else "0-1"
             else:
                 result_str = "1/2-1/2"
+        else:
+            result_str = "1/2-1/2"
 
-            game.headers["White"] = white_net[0]
-            game.headers["Black"] = black_net[0]
-            game.headers["Result"] = result_str
+        game.headers["White"] = white_name
+        game.headers["Black"] = black_name
+        game.headers["Result"] = result_str
 
-            pgn_str = str(game) if self.args.save_pgn else ""
+        pgn_str = str(game) if self.args.save_pgn else ""
 
-            return GameResult(white_net[0], black_net[0], result_str, pgn_str)
-
-        finally:
-            await white_engine.quit()
-            await black_engine.quit()
+        return GameResult(white_name, black_name, result_str, pgn_str)
 
     def _count_material(self, board: chess.Board) -> int:
-        """Count material difference (positive = white advantage)"""
         values = {chess.PAWN: 1, chess.KNIGHT: 3, chess.BISHOP: 3,
                   chess.ROOK: 5, chess.QUEEN: 9}
-
-        white_material = sum(values.get(piece.piece_type, 0)
-                             for piece in board.piece_map().values()
-                             if piece.color == chess.WHITE)
-        black_material = sum(values.get(piece.piece_type, 0)
-                             for piece in board.piece_map().values()
-                             if piece.color == chess.BLACK)
-
+        white_material = sum(values.get(p.piece_type, 0)
+                             for p in board.piece_map().values()
+                             if p.color == chess.WHITE)
+        black_material = sum(values.get(p.piece_type, 0)
+                             for p in board.piece_map().values()
+                             if p.color == chess.BLACK)
         return white_material - black_material
 
-    def run_match(self, network_a: Tuple[str, str, str],
-                  network_b: Tuple[str, str, str]) -> Dict:
-        """Run a match between two networks"""
-
+    async def run_match_async(self, network_a: Tuple[str, str, str],
+                              network_b: Tuple[str, str, str]) -> Dict:
+        """Run a match between two networks (async version)"""
         print(f"\nRunning match: {network_a[0]} vs {network_b[0]}")
-        print(f"Games: {self.args.num_games}, Threads: {self.args.threads}")
+        print(f"Games: {self.args.num_games}")
 
-        # Create async event loop for this thread
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
+        # Start engines once
+        await self.start_engines(network_a, network_b)
 
-        # Prepare games (alternating colors)
-        games = []
-        for i in range(self.args.num_games):
-            white_is_a = (i % 2 == 0)
-            games.append((network_a, network_b, white_is_a))
+        try:
+            # Play all games sequentially, reusing the same engines
+            games_played = 0
+            retries = 0
+            max_retries = 3
 
-        # Run games in parallel
-        results = []
-        with ThreadPoolExecutor(max_workers=self.args.threads) as executor:
-            futures = []
-            for game_args in games:
-                future = executor.submit(self._run_game_sync, *game_args)
-                futures.append(future)
+            with tqdm(total=self.args.num_games, desc="Playing games") as pbar:
+                while games_played < self.args.num_games:
+                    white_is_a = (games_played % 2 == 0)  # Alternate colors
+                    result = await self.play_game(white_is_a)
 
-            # Collect results with progress bar
-            for future in tqdm(as_completed(futures), total=len(futures),
-                               desc="Playing games"):
-                result = future.result()
-                results.append(result)
-                self.results.append(result)
+                    if result is None:
+                        # Game failed (engine crash), retry
+                        retries += 1
+                        if retries > max_retries:
+                            logging.error(f"Too many retries, skipping game {games_played}")
+                            retries = 0
+                            games_played += 1
+                            pbar.update(1)
+                        continue
+
+                    retries = 0
+                    self.results.append(result)
+                    games_played += 1
+                    pbar.update(1)
+
+                    # Save results incrementally
+                    if self.args.output and games_played % 10 == 0:
+                        self._save_results()
+
+        finally:
+            # Always stop engines
+            await self.stop_engines()
 
         # Calculate statistics
-        stats = self._calculate_stats(results, network_a[0], network_b[0])
+        stats = self._calculate_stats(self.results, network_a[0], network_b[0])
 
-        # Save results incrementally
+        # Final save
         if self.args.output:
             self._save_results()
 
         return stats
 
-    def _run_game_sync(self, network_a, network_b, white_is_a):
-        """Synchronous wrapper for async game playing"""
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
-        try:
-            return loop.run_until_complete(
-                self.play_game(network_a, network_b, white_is_a)
-            )
-        finally:
-            loop.close()
+    def run_match(self, network_a: Tuple[str, str, str],
+                  network_b: Tuple[str, str, str]) -> Dict:
+        """Run a match (sync wrapper)"""
+        return asyncio.run(self.run_match_async(network_a, network_b))
 
     def _calculate_stats(self, results: List[GameResult],
                          name_a: str, name_b: str) -> Dict:
-        """Calculate match statistics"""
         wins_a = sum(1 for r in results if
                      (r.white_network == name_a and r.result == "1-0") or
                      (r.black_network == name_a and r.result == "0-1"))
@@ -251,92 +276,46 @@ class NetworkTester:
 
         total = len(results)
         score_a = wins_a + draws * 0.5
-        score_b = wins_b + draws * 0.5
 
-        # Calculate Elo difference (simplified)
-        if score_a > 0 and score_b > 0:
+        if total > 0:
             win_rate = score_a / total
-            elo_diff = 400 * (win_rate - 0.5) / 0.29  # Simplified Elo formula
+            elo_diff = 400 * (win_rate - 0.5) / 0.29
         else:
+            win_rate = 0
             elo_diff = 0
 
         stats = {
-            'network_a': name_a,
-            'network_b': name_b,
-            'games': total,
-            'wins_a': wins_a,
-            'wins_b': wins_b,
-            'draws': draws,
-            'score_a': score_a,
-            'score_b': score_b,
-            'win_rate_a': score_a / total if total > 0 else 0,
-            'elo_diff': elo_diff,
+            'network_a': name_a, 'network_b': name_b,
+            'games': total, 'wins_a': wins_a, 'wins_b': wins_b,
+            'draws': draws, 'score_a': score_a,
+            'win_rate_a': win_rate, 'elo_diff': elo_diff,
             'timestamp': datetime.now().isoformat()
         }
 
-        # Print results
         print(f"\nResults: {name_a} vs {name_b}")
         print(f"  Games: {total}")
         print(f"  Score: +{wins_a}={draws}-{wins_b}")
-        print(f"  Win rate for {name_a}: {stats['win_rate_a']:.1%}")
+        print(f"  Win rate for {name_a}: {win_rate:.1%}")
         print(f"  Elo difference: {elo_diff:+.1f}")
 
         return stats
 
     def _save_results(self):
-        """Save results to JSON file"""
         output_path = Path(self.args.output)
-
-        # Load existing results if file exists
         all_results = []
         if output_path.exists():
             with open(output_path, 'r') as f:
                 data = json.load(f)
                 all_results = data.get('games', [])
 
-        # Add new results
-        all_results.extend([r.to_dict() for r in self.results])
+        # Only add results not already saved
+        existing_count = len(all_results)
+        new_results = self.results[existing_count:]
+        all_results.extend([r.to_dict() for r in new_results])
 
-        # Save
-        data = {
-            'games': all_results,
-            'last_updated': datetime.now().isoformat()
-        }
-
+        data = {'games': all_results, 'last_updated': datetime.now().isoformat()}
         with open(output_path, 'w') as f:
             json.dump(data, f, indent=2)
-
-        print(f"Results saved to {output_path}")
-
-    def run_ordo(self, pgn_file: str = None):
-        """Run ordo to calculate Elo ratings"""
-        if not self.args.ordo_path:
-            print("Ordo path not specified, skipping Elo calculation")
-            return
-
-        # Create PGN file for ordo
-        if not pgn_file:
-            pgn_file = "games_for_ordo.pgn"
-
-        with open(pgn_file, 'w') as f:
-            for result in self.results:
-                if result.pgn:
-                    f.write(result.pgn + "\n\n")
-
-        # Run ordo
-        cmd = [self.args.ordo_path, "-q", "-p", pgn_file, "-o", "ordo_ratings.txt"]
-        try:
-            subprocess.run(cmd, check=True)
-            print(f"Ordo ratings saved to ordo_ratings.txt")
-
-            # Display ratings
-            with open("ordo_ratings.txt", 'r') as f:
-                print("\nOrdo Ratings:")
-                print(f.read())
-        except subprocess.CalledProcessError as e:
-            print(f"Error running ordo: {e}")
-        except FileNotFoundError:
-            print(f"Ordo executable not found at {self.args.ordo_path}")
 
 
 def main():
@@ -345,7 +324,6 @@ def main():
         formatter_class=argparse.ArgumentDefaultsHelpFormatter
     )
 
-    # Engine settings
     parser.add_argument("engine", help="Path to sunfish_nnue.py")
     parser.add_argument("--network-a", required=True, nargs=3,
                         metavar=("NAME", "MODEL_NAME", "MODEL_PATH"),
@@ -354,57 +332,26 @@ def main():
                         metavar=("NAME", "MODEL_NAME", "MODEL_PATH"),
                         help="Second network: display_name model_name model_path")
 
-    # Game settings
-    parser.add_argument("--num-games", type=int, default=100,
-                        help="Number of games to play")
-    parser.add_argument("--threads", type=int, default=1,
-                        help="Number of parallel games")
-    parser.add_argument("--batch-size", type=int, default=1,
-                        help="Batch size for NNUE evaluation")
+    parser.add_argument("--num-games", type=int, default=100)
     parser.add_argument("--compile-mode", default="default",
-                        choices=["default", "reduce-overhead", "max-autotune"],
-                        help="PyTorch compilation mode")
+                        choices=["default", "reduce-overhead", "max-autotune"])
 
-    # Time control
-    parser.add_argument("--nodes", type=int,
-                        help="Nodes per move (default)")
-    parser.add_argument("--movetime", type=int,
-                        help="Time per move in milliseconds")
-    parser.add_argument("--depth", type=int,
-                        help="Search depth limit")
+    parser.add_argument("--nodes", type=int, help="Nodes per move")
+    parser.add_argument("--movetime", type=int, help="Time per move (ms)")
+    parser.add_argument("--depth", type=int, help="Search depth limit")
 
-    # Game control
-    parser.add_argument("--max-moves", type=int, default=200,
-                        help="Maximum moves per game")
-    parser.add_argument("--adjudicate-threshold", type=int, default=6,
-                        help="Material threshold for adjudication (pawns)")
-    parser.add_argument("--opening-moves", type=str,
-                        help="Opening moves in UCI format (e.g. 'e2e4 e7e5')")
-    parser.add_argument("--book-path", type=str,
-                        help="Path to opening book for sunfish")
+    parser.add_argument("--max-moves", type=int, default=110)
+    parser.add_argument("--adjudicate-threshold", type=int, default=6)
+    parser.add_argument("--opening-moves", type=str)
+    parser.add_argument("--book-path", type=str)
 
-    # Output settings
-    parser.add_argument("--output", type=str, default="results.json",
-                        help="Output file for results")
-    parser.add_argument("--save-pgn", action="store_true",
-                        help="Save games in PGN format")
-    parser.add_argument("--ordo-path", type=str,
-                        help="Path to ordo executable for Elo calculation")
+    parser.add_argument("--output", type=str, default="results.json")
+    parser.add_argument("--save-pgn", action="store_true")
 
     args = parser.parse_args()
 
-    # Run tests
     tester = NetworkTester(args.engine, args)
-
-    # Run match
-    stats = tester.run_match(
-        tuple(args.network_a),
-        tuple(args.network_b)
-    )
-
-    # Run ordo if available
-    if args.ordo_path and args.save_pgn:
-        tester.run_ordo()
+    tester.run_match(tuple(args.network_a), tuple(args.network_b))
 
 
 if __name__ == "__main__":

@@ -61,7 +61,7 @@ def go_loop(searcher, hist, stop_event, max_movetime=0, max_depth=0, debug=False
         else:
             fields["score cp"] = f"{score} upperbound"
         print("info", " ".join(f"{k} {v}" for k, v in fields.items()))
-        logging.info(f"depth {depth}, time {elapsed}, nodes {searcher.nodes}, nps {searcher.nodes / elapsed}")
+        #logging.info(f"depth {depth}, time {elapsed}, nodes {searcher.nodes}, nps {searcher.nodes / elapsed}")
 
         # We may not have a move yet at depth = 1
         if depth > 1:

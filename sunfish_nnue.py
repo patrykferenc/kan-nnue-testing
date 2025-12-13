@@ -1269,6 +1269,7 @@ class Searcher:
                     lower = score
                 if score < gamma:
                     upper = score
+                #logging.info("yielding move self.tp_move.get(pos.hash())")
                 yield depth, gamma, score, self.tp_move.get(pos.hash())
                 gamma = (lower + upper + 1) // 2
 
