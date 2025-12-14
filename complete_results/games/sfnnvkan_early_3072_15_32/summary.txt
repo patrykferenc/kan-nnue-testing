@@ -1,0 +1,35 @@
+NETWORK TESTING SUMMARY
+============================================================
+
+Total games analyzed: 100
+
+PAIRWISE ELO DIFFERENCES
+----------------------------------------
+
+sfnnv9 vs sfnnvkan_early_3072_15_32:
+  Games: 100
+  Score: +19=57-24
+  Win rate: 47.5%
+  Elo diff: -17.4 ± 68.2
+  LOS: 0.0%
+  Result: No significant difference
+
+
+INDIVIDUAL NETWORK PERFORMANCE
+----------------------------------------
+
+sfnnv9:
+  Games: 100
+  Wins: 19
+  Draws: 57
+  Losses: 24
+  Score: 47.5/100
+  Win Rate: 47.5%
+
+sfnnvkan_early_3072_15_32:
+  Games: 100
+  Wins: 24
+  Draws: 57
+  Losses: 19
+  Score: 52.5/100
+  Win Rate: 52.5%

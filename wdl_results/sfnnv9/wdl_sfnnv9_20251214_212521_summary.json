@@ -1,0 +1,60 @@
+{
+  "metadata": {
+    "engine_path": "/home/patryk/msc/nnue-pytorch/mystuff/experiments/experiment_baseline-20250707_141503/stockfish_base/src/stockfish",
+    "net_path": null,
+    "data_path": "/home/patryk/msc/data/T60T70wIsRightFarseer.binpack",
+    "checkpoint_path": "PLACEHOLDER",
+    "model_name": "sfnnv9",
+    "positions_evaluated": 10203,
+    "batch_size": 500
+  },
+  "thresholds": {
+    "engine_win_threshold": 150,
+    "model_win_threshold": 273,
+    "engine_scale": 208,
+    "model_scale": 600,
+    "threshold_ratio": 1.82
+  },
+  "metrics": {
+    "accuracy": 0.7136136430461629,
+    "macro_f1": 0.6464217864584557,
+    "class_metrics": {
+      "W": {
+        "precision": 0.7691751085383502,
+        "recall": 0.4527257240204429,
+        "f1": 0.5699731903485254,
+        "support": 2348
+      },
+      "D": {
+        "precision": 0.7032067623775661,
+        "recall": 0.8931492842535788,
+        "f1": 0.7868778620223708,
+        "support": 5868
+      },
+      "L": {
+        "precision": 0.7141812865497076,
+        "recall": 0.49169602415702063,
+        "f1": 0.5824143070044709,
+        "support": 1987
+      }
+    },
+    "confusion_matrix": {
+      "W": {
+        "W": 1063,
+        "D": 1234,
+        "L": 51
+      },
+      "D": {
+        "W": 287,
+        "D": 5241,
+        "L": 340
+      },
+      "L": {
+        "W": 32,
+        "D": 978,
+        "L": 977
+      }
+    }
+  },
+  "timestamp": "20251214_212521"
+}

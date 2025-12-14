@@ -3,10 +3,9 @@
   "net_path": null,
   "data_path": "/home/patryk/msc/data/T60T70wIsRightFarseer.binpack",
   "checkpoint_path": "PLACEHOLDER",
-  "model_name": "sfnnvkan_early_3072_15_32",
+  "model_name": "sfnnv9",
   "count": 10000,
   "batch_size": 500,
   "output_dir": "./wdl_results",
-  "engine_threshold": 150,
-  "model_threshold": 400
+  "engine_threshold": 150
 }

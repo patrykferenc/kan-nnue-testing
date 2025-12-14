@@ -1,0 +1,23 @@
+NETWORK TESTING SUMMARY
+============================================================
+
+Total games analyzed: 100
+
+NETWORK PERFORMANCE
+----------------------------------------
+
+sfnnv9:
+  Games: 100
+  Wins: 18
+  Draws: 63
+  Losses: 19
+  Score: 49.5/100
+  Win Rate: 49.5%
+
+sfnnvkan_g3_k3_3072_15_32_mlp:
+  Games: 100
+  Wins: 19
+  Draws: 63
+  Losses: 18
+  Score: 50.5/100
+  Win Rate: 50.5%

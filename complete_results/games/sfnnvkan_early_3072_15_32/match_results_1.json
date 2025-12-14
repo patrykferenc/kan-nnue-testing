@@ -1,0 +1,355 @@
+{
+  "games": [
+    {
+      "white_network": "sfnnvkan_early_3072_15_32",
+      "black_network": "sfnnv9",
+      "result": "1/2-1/2",
+      "pgn": "[Event \"?\"]\n[Site \"?\"]\n[Date \"????.??.??\"]\n[Round \"?\"]\n[White \"sfnnvkan_early_3072_15_32\"]\n[Black \"sfnnv9\"]\n[Result \"1/2-1/2\"]\n\n1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6 6. Be3 e5 7. Nb3 Be6 8. f3 h5 9. Qd2 Nbd7 10. Nd5 Bxd5 11. exd5 g6 12. Be2 Bg7 13. Bg5 Ne4 14. Bxd8 Nxd2 15. Nxd2 e4 16. Nc4 O-O 17. Rb1 Re8 18. Nxd6 Bc3+ 19. Kf1 exf3 20. Bxf3 Re1+ 21. Kf2 Bd4+ 22. Kg3 Bf2+ 23. Kh3 Rxh1 24. Rxh1 Rxd8 25. Nxf7 Ne5 26. Ng5 Be3 27. Ne4 Nd7 28. Bg4 hxg4+ 29. Kxg4 g5 30. Nxg5 Bc1 31. Ne6 Ne5+ 32. Kf5 a5 33. a3 Nd3 34. c3 Nf2 35. Kf6 Rd6 36. Ke7 Rd7+ 37. Ke8 Rd8+ 38. Ke7 Bg5+ 39. Nxg5 Rd7+ 40. Kxd7 Nxh1 41. Ke7 Kh8 42. d6 b5 43. d7 Ng3 44. d8=Q+ Kg7 45. hxg3 a4 46. Qe8 b4 47. cxb4 Kh6 48. Kf6 1/2-1/2",
+      "timestamp": "2025-12-13T20:51:52.165752"
+    },
+    {
+      "white_network": "sfnnv9",
+      "black_network": "sfnnvkan_early_3072_15_32",
+      "result": "1-0",
+      "pgn": "[Event \"?\"]\n[Site \"?\"]\n[Date \"????.??.??\"]\n[Round \"?\"]\n[White \"sfnnv9\"]\n[Black \"sfnnvkan_early_3072_15_32\"]\n[Result \"1-0\"]\n\n1. d4 Nf6 2. Nf3 d5 3. c4 e6 4. Nc3 c6 5. Bg5 Be7 6. e3 h6 7. Bh4 O-O 8. Qc2 b6 9. Be2 Ba6 10. Ne5 Nh7 11. f4 Bb5 12. Qxh7+ Kxh7 13. Bf6 Bc5 14. Bd3+ Kg8 15. Bh7+ Kh8 16. Bg6 h5 17. Bxh5 Ba3 18. Nxf7+ Kh7 19. O-O Rg8 20. Bg6+ Kxg6 21. b3 Kh5 22. Ne4 Ba6 23. Ng3+ Kg4 24. Ne5# 1-0",
+      "timestamp": "2025-12-13T20:52:28.166869"
+    },
+    {
+      "white_network": "sfnnvkan_early_3072_15_32",
+      "black_network": "sfnnv9",
+      "result": "0-1",
+      "pgn": "[Event \"?\"]\n[Site \"?\"]\n[Date \"????.??.??\"]\n[Round \"?\"]\n[White \"sfnnvkan_early_3072_15_32\"]\n[Black \"sfnnv9\"]\n[Result \"0-1\"]\n\n1. d4 Nf6 2. Nf3 d5 3. c4 e6 4. Nc3 c6 5. Bg5 Be7 6. e3 Nbd7 7. cxd5 exd5 8. Qc2 O-O 9. Bd3 Re8 10. O-O Nf8 11. h3 g6 12. Rab1 Ne6 13. Bh6 Ng4 14. Bg7 Bd6 15. e4 Bf8 16. Rbe1 Nf4 17. Nh4 Qd7 18. Bb5 Nxh3+ 19. gxh3 Ne3 20. Qb1 Qg4+ 21. Ng2 Qxg2# 0-1",
+      "timestamp": "2025-12-13T20:53:06.495716"
+    },
+    {
+      "white_network": "sfnnv9",
+      "black_network": "sfnnvkan_early_3072_15_32",
+      "result": "1-0",
+      "pgn": "[Event \"?\"]\n[Site \"?\"]\n[Date \"????.??.??\"]\n[Round \"?\"]\n[White \"sfnnv9\"]\n[Black \"sfnnvkan_early_3072_15_32\"]\n[Result \"1-0\"]\n\n1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6 6. Be3 e5 7. Nb3 Be6 8. f3 h5 9. Qd2 Nbd7 10. Nd5 Bxd5 11. exd5 g6 12. Be2 Bg7 13. Kd1 Ne4 14. Bf1 Rg8 15. Bb6 Qg5 16. Be3 Bh6 17. Ke1 f5 18. a3 Qh4+ 19. Ke2 Qe1+ 20. Kd3 Qe2+ 21. Bxe2 Nf2+ 22. Kc3 Rc8+ 23. Bc5 Rxc5+ 24. Nxc5 Nd1+ 25. Kb4 a5+ 26. Kxa5 b6+ 27. Kb5 Nc3+ 28. Kc6 Nxc5 29. f4 Bxf4 30. Qe1 Bd2 31. Qf2 Be1 32. Qf1 Nb3 33. Rb1 Nxd5 34. Kb5 Nc7+ 35. Kc4 Na5+ 36. Kd3 e4+ 37. Ke3 Nd5+ 38. Kd4 Nc6+ 39. Kc4 b5+ 40. Kxd5 Ne7+ 41. Kxd6 Bb4+ 42. Ke6 Nc6 43. Re1 Nd8+ 44. Kf6 Bc3+ 45. Kg5 Nf7+ 46. Kf4 Be5+ 47. Ke3 f4+ 48. Kxe4 Ng5+ 49. Kd5 Ke7 50. Kc6 Rc8+ 51. Kd5 Rc5+ 52. Kxc5 Bd6+ 53. Kc6 Ne4 54. Kb7 Nc5+ 55. Kc8 Ne6 1-0",
+      "timestamp": "2025-12-13T20:54:15.296203"
+    },
+    {
+      "white_network": "sfnnvkan_early_3072_15_32",
+      "black_network": "sfnnv9",
+      "result": "1-0",
+      "pgn": "[Event \"?\"]\n[Site \"?\"]\n[Date \"????.??.??\"]\n[Round \"?\"]\n[White \"sfnnvkan_early_3072_15_32\"]\n[Black \"sfnnv9\"]\n[Result \"1-0\"]\n\n1. d4 Nf6 2. Nf3 d5 3. c4 e6 4. Nc3 c6 5. Bg5 Be7 6. e3 dxc4 7. Bxc4 Nd5 8. Bxe7 Qxe7 9. O-O O-O 10. Bd3 Nd7 11. Qb3 Re8 12. Rfe1 Nxc3 13. Bxh7+ Kh8 14. Qxc3 Nf6 15. Bg6 Qb4 16. Ng5 Re7 17. e4 Bd7 18. Qh3+ Kg8 19. Qh7+ Kf8 20. Qg8+ Nxg8 21. Nh7+ Ke8 22. a3 Qxe1+ 23. Rxe1 Kd8 24. Bxf7 g6 25. Nf8 Re8 26. Nxd7 Nf6 27. Bxg6 Rg8 28. Nf8 Kc8 29. h4 e5 30. Bf5+ Kb8 31. Nd7+ Kc7 32. Nc5 Rxg2+ 33. Kf1 Rxf2+ 34. Kg1 Rf1+ 35. Kh2 Rh1+ 36. Kg3 Rg8+ 37. Kf3 Nh7 38. Re2 Rh3+ 39. Bxh3 exd4 40. Ne6+ Kd6 41. e5+ Ke7 42. Nd8 Kxd8 43. Rg2 Ke7 44. Rxg8 d3 45. Rg1 d2 46. Rd1 Nf8 47. Kf2 Ng6 48. h5 Nxe5 49. h6 Nc4 50. h7 Nxb2 51. Rxd2 Kf7 52. h8=Q Nc4 53. Rd7+ Kg6 54. Qg8+ Kf6 55. Qxc4 a5 1-0",
+      "timestamp": "2025-12-13T20:55:10.969832"
+    },
+    {
+      "white_network": "sfnnv9",
+      "black_network": "sfnnvkan_early_3072_15_32",
+      "result": "1/2-1/2",
+      "pgn": "[Event \"?\"]\n[Site \"?\"]\n[Date \"????.??.??\"]\n[Round \"?\"]\n[White \"sfnnv9\"]\n[Black \"sfnnvkan_early_3072_15_32\"]\n[Result \"1/2-1/2\"]\n\n1. d4 Nf6 2. Nf3 d5 3. c4 e6 4. Nc3 c6 5. Bg5 Be7 6. e3 Nbd7 7. Qc2 O-O 8. Rd1 h6 9. Bh4 b6 10. Bd3 Ba6 11. cxd5 Bxd3 12. Qxd3 cxd5 13. g3 Ne8 14. e4 f5 15. Qc2 Bg5 16. Nxg5 Rc8 17. Qb1 Qe7 18. Nxe6 Qxh4 19. Qa1 Qxe4+ 20. Ne2 Qxh1+ 21. Kd2 Rc1 22. N6f4 Qxd1+ 23. Ke3 Qd3+ 24. Nxd3 f4+ 25. Nexf4 Rxf4 26. Nxc1 Rf3+ 27. Kd2 Rd3+ 28. Kxd3 Ndf6 29. Ke3 Ng4+ 30. Kf4 Nxf2 31. Kf5 g6+ 32. Kf4 Nd3+ 33. Nxd3 Ng7 34. Ke5 Nf5 35. Qc1 Kf7 36. g4 Ne7 37. Qxh6 Ng8 38. Qh7+ Kf8 39. Kd6 Nf6 40. Qe7+ Kg8 41. Qxf6 b5 42. Ne5 Kh7 43. Qf7+ Kh8 44. g5 b4 45. b3 a5 46. h4 a4 47. bxa4 b3 48. axb3 1/2-1/2",
+      "timestamp": "2025-12-13T20:56:00.558290"
+    },
+    {
+      "white_network": "sfnnvkan_early_3072_15_32",
+      "black_network": "sfnnv9",
+      "result": "1-0",
+      "pgn": "[Event \"?\"]\n[Site \"?\"]\n[Date \"????.??.??\"]\n[Round \"?\"]\n[White \"sfnnvkan_early_3072_15_32\"]\n[Black \"sfnnv9\"]\n[Result \"1-0\"]\n\n1. e4 c6 2. d4 d5 3. e5 Bf5 4. Nf3 e6 5. Be2 Nd7 6. O-O h6 7. c3 Ne7 8. Nbd2 Qc7 9. Re1 O-O-O 10. a4 g5 11. Nf1 f6 12. exf6 Ng6 13. b3 Qxh2+ 14. Kxh2 Bd6+ 15. Ne5 Bxe5+ 16. Bf4 Bc7 17. Bf3 g4 18. g3 Nde5 19. Bg2 Nf3+ 20. Qxf3 Nxf4 21. Kh1 Nh5 22. Rxe6 Nxg3+ 23. Nxg3 gxf3 24. Re3 Be5 25. Bh3 Kc7 26. f7 Bg7 27. b4 Rd7 28. Re7 Be6 29. Bg4 Rf8 30. Rxd7+ Kxd7 31. Bh5 Kc7 32. Rg1 Bg4 33. Bg6 b5 34. Bc2 Bf5 35. Bb1 Bg6 36. Nf1 Bf6 37. Nh2 h5 38. Nxf3 bxa4 39. Ng5 Kb7 40. Ne6 Bf5 41. Rg4 Ka8 42. Rg8 Be4+ 43. Kh2 Be5+ 44. Kh3 Bg2+ 45. Kh4 Bg3+ 46. Kxh5 Bf3+ 47. Rg4 Rh8+ 48. Kg6 Be4+ 49. Kg7 Be5+ 50. dxe5 Rh7+ 51. Kf8 Rxf7+ 52. Kxf7 Bf3 53. Rg3 Be2 54. Nd8 Kb8 55. Rg7 Bb5 1-0",
+      "timestamp": "2025-12-13T20:56:59.470679"
+    },
+    {
+      "white_network": "sfnnv9",
+      "black_network": "sfnnvkan_early_3072_15_32",
+      "result": "1-0",
+      "pgn": "[Event \"?\"]\n[Site \"?\"]\n[Date \"????.??.??\"]\n[Round \"?\"]\n[White \"sfnnv9\"]\n[Black \"sfnnvkan_early_3072_15_32\"]\n[Result \"1-0\"]\n\n1. d4 Nf6 2. Nf3 d5 3. c4 e6 4. Nc3 c6 5. Bg5 Be7 6. e3 O-O 7. Bd3 h6 8. Bxf6 Bxf6 9. Rc1 Nd7 10. O-O dxc4 11. Bxc4 e5 12. Ne4 exd4 13. Be2 Bh4 14. exd4 f6 15. Bc4+ Kh8 16. Be6 Nc5 17. Bd7 h5 18. g3 f5 19. Ne5 Qe8 20. Qxh5+ Kg8 21. Qh7+ Kxh7 22. gxh4 Rf6 23. Ng6 Qe5 24. Nf4 Qe6 25. Ng5+ Kh8 26. Ng6+ Kg8 27. Ne7+ Kh8 28. f4 Qe3+ 29. Kg2 Qf2+ 30. Kxf2 Ne4+ 31. Ke2 Nc3+ 32. Kd3 Bxd7 33. a3 Nd5 34. Nf3 g6 35. Nxd5 cxd5 36. Ke2 Be6 37. a4 Bd7 38. a5 Re6+ 39. Ne5 Ba4 40. Rfd1 Kh7 41. Rc7+ Kh6 42. Rxb7 Re7 43. b4 Bb5+ 44. Rd3 Rb8 45. Rb6 Re6 46. Rd6 a6 47. Rxd5 Kh5 48. Rd7 Re7 49. Kf2 Rxe5 50. Rg3 Re2+ 51. Kf3 Rf2+ 52. Ke3 Rf3+ 53. Kd2 Ba4 54. Rh7# 1-0",
+      "timestamp": "2025-12-13T20:58:15.401828"
+    },
+    {
+      "white_network": "sfnnvkan_early_3072_15_32",
+      "black_network": "sfnnv9",
+      "result": "1/2-1/2",
+      "pgn": "[Event \"?\"]\n[Site \"?\"]\n[Date \"????.??.??\"]\n[Round \"?\"]\n[White \"sfnnvkan_early_3072_15_32\"]\n[Black \"sfnnv9\"]\n[Result \"1/2-1/2\"]\n\n1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6 6. Be3 e5 7. Nb3 Be6 8. f3 h5 9. Qd2 Nbd7 10. Nd5 Bxd5 11. exd5 g6 12. Be2 Bg7 13. Na5 Rh6 14. Nc4 Kf8 15. Nxe5 Nb6 16. Bxh6 Kg8 17. Bg5 Ne4 18. h4 Bxe5 19. Qd3 Nf2 20. Kxf2 Bd4+ 21. Be3 Qxh4+ 22. Kf1 Qe1+ 23. Kxe1 Bc3+ 24. Qd2 Bxd2+ 25. Kd1 Bxe3 26. Rb1 Bg1 27. b4 Nd7 28. Bb5 Nb6 29. Bd3 Bh2 30. Ke2 a5 31. b5 Kg7 32. f4 a4 33. Kd1 Kh6 34. f5 Nc8 35. Bf1 gxf5 36. g4 h4 37. gxf5 Ra5 38. a3 Ra7 39. Rb2 Kh5 40. Rb3 Kg5 41. f6 Kxf6 42. Rf3+ Kg5 43. Rf4 Bg3 44. Rd4 Be5 45. Rg4+ Kf6 46. Rg8 Nb6 47. Rg2 Nc8 48. Rf2+ Ke7 49. Rf4 f5 50. Rg4 Kf7 51. Bh3 Ra8 52. Rg5 Bf6 53. Bxf5 Ne7 54. Be6+ Kf8 55. Rg8+ Nxg8 1/2-1/2",
+      "timestamp": "2025-12-13T20:59:11.483293"
+    },
+    {
+      "white_network": "sfnnv9",
+      "black_network": "sfnnvkan_early_3072_15_32",
+      "result": "1/2-1/2",
+      "pgn": "[Event \"?\"]\n[Site \"?\"]\n[Date \"????.??.??\"]\n[Round \"?\"]\n[White \"sfnnv9\"]\n[Black \"sfnnvkan_early_3072_15_32\"]\n[Result \"1/2-1/2\"]\n\n1. d4 Nf6 2. Nf3 d5 3. c4 e6 4. Nc3 c6 5. Bg5 Be7 6. e3 O-O 7. Bd3 h6 8. Bxf6 Bxf6 9. Rc1 dxc4 10. Bxc4 Nd7 11. O-O e5 12. h3 exd4 13. Ne2 Nc5 14. e4 Bg4 15. hxg4 d3 16. Nh4 Bd4 17. b3 Qf6 18. Bxf7+ Kxf7 19. Nxd4 Qxh4 20. Nf5 Qh1+ 21. Kxh1 Nxe4 22. Nd6+ Kg8 23. Kh2 Nxf2 24. Nxb7 Nxg4+ 25. Kg1 Rxf1+ 26. Qxf1 d2 27. Qc4+ Kh8 28. Qxg4 dxc1=Q+ 29. Qd1 Qxd1+ 30. Kh2 Qd6+ 31. Kh1 Qh2+ 32. Kxh2 Rb8 33. Na5 Rb5 34. a4 Rxa5 35. b4 Rd5 36. b5 cxb5 37. Kh1 Rd8 38. Kg1 Rb8 39. Kh2 b4 40. g3 b3 41. Kh3 b2 42. Kh2 b1=Q 43. a5 Rf8 44. Kh3 a6 45. g4 Qb5 46. g5 Re8 47. gxh6 Qe2 48. hxg7+ Kg8 49. Kg3 Re4 50. Kh3 Qf2 1/2-1/2",
+      "timestamp": "2025-12-13T20:59:57.916373"
+    },
+    {
+      "white_network": "sfnnvkan_early_3072_15_32",
+      "black_network": "sfnnv9",
+      "result": "1/2-1/2",
+      "pgn": "[Event \"?\"]\n[Site \"?\"]\n[Date \"????.??.??\"]\n[Round \"?\"]\n[White \"sfnnvkan_early_3072_15_32\"]\n[Black \"sfnnv9\"]\n[Result \"1/2-1/2\"]\n\n1. e4 c6 2. d4 d5 3. e5 h6 4. Bd3 e6 5. Nf3 c5 6. O-O Nc6 7. c3 Bd7 8. Re1 Rh7 9. Na3 f5 10. Nb5 Qb6 11. Nd6+ Kd8 12. Qb3 Kc7 13. Qxb6+ axb6 14. dxc5 Kb8 15. Nxb7 Bxc5 16. Be2 Kc7 17. b4 Bd4 18. Be3 h5 19. Kf1 Rh8 20. Bb5 Na7 21. Ng1 Bc6 22. Nc5 Bxc5 23. Bxc6 f4 24. g4 Rh6 25. Bxc5 Nxc6 26. Bd6+ Kd7 27. b5 Nd4 28. Red1 Nb3 29. Nf3 Rxa2 30. Kg1 Rg6 31. Rab1 Rxg4+ 32. Kh1 Kd8 33. Rg1 Rg3 34. Rxg3 fxg3 35. Bc7+ Ke7 36. Rxb3 g2+ 37. Kg1 Ra1+ 38. Ne1 Ke8 39. Bd6 Rc1 40. Rb2 Ra1 41. Re2 h4 42. h3 Kd7 43. Bf8 Rb1 44. c4 dxc4 45. Bxg7 Rd1 46. Rd2+ Rxd2 47. Nf3 Rd1+ 48. Kxg2 Rc1 49. Bh6 Rf1 50. Be3 Rb1 51. Nd2 Ra1 52. Nxc4 Rb1 53. Kf3 Rb3 54. Kf4 Rc3 55. f3 Rxc4+ 1/2-1/2",
+      "timestamp": "2025-12-13T21:01:49.639275"
+    },
+    {
+      "white_network": "sfnnv9",
+      "black_network": "sfnnvkan_early_3072_15_32",
+      "result": "0-1",
+      "pgn": "[Event \"?\"]\n[Site \"?\"]\n[Date \"????.??.??\"]\n[Round \"?\"]\n[White \"sfnnv9\"]\n[Black \"sfnnvkan_early_3072_15_32\"]\n[Result \"0-1\"]\n\n1. d4 Nf6 2. Nf3 d5 3. c4 e6 4. Nc3 c6 5. Bg5 Be7 6. e3 Nbd7 7. Rc1 h6 8. Bxf6 Nxf6 9. Bd3 dxc4 10. Bxc4 O-O 11. O-O c5 12. dxc5 Qa5 13. Be2 Qa6 14. Na4 Ne8 15. Nd4 e5 16. b4 Bd7 17. Nb6 Qxb6 18. Nf3 Bd6 19. Qe1 f5 20. Bc4+ Kh8 21. Bd3 Qb5 22. Nh4 Be7 23. Ng6+ Kh7 24. Nxf8+ Kh8 25. Ng6+ Kh7 26. Nf8+ Kh8 27. Be2 Qxb4 28. Ng6+ Kh7 29. Nf8+ Kg8 30. Ne6 Rc8 31. Bc4 Kh8 32. Bb3 Nf6 33. Nf4 Rxc5 34. Ng6+ Kh7 35. Nh4 Rc7 36. Nf3 Qb5 37. Qe2 Be6 38. Bc4 Qc6 39. Bd5 e4 40. Rxc6 exf3 41. gxf3 Bxd5 42. Rxf6 Bxf3 43. Rf7 Bf6 44. Rf8 Rc4 45. Qd3 Rg4# 0-1",
+      "timestamp": "2025-12-13T21:02:41.689133"
+    },
+    {
+      "white_network": "sfnnvkan_early_3072_15_32",
+      "black_network": "sfnnv9",
+      "result": "1/2-1/2",
+      "pgn": "[Event \"?\"]\n[Site \"?\"]\n[Date \"????.??.??\"]\n[Round \"?\"]\n[White \"sfnnvkan_early_3072_15_32\"]\n[Black \"sfnnv9\"]\n[Result \"1/2-1/2\"]\n\n1. d4 Nf6 2. Nf3 d5 3. c4 e6 4. Nc3 c6 5. Bg5 Be7 6. e3 Nbd7 7. Qc2 O-O 8. Rc1 a6 9. cxd5 exd5 10. Bd3 h6 11. Bh4 Re8 12. O-O Nh5 13. Bg6 f5 14. Bxf5 Ng3 15. Rfd1 Nh5 16. Bg4 Ne5 17. Bf5 Nxf3+ 18. Kf1 Nxh2+ 19. Kg1 Nf3+ 20. gxf3 Kh8 21. Bg6 Qa5 22. Na4 Qe1+ 23. Kh2 Qg1+ 24. Rxg1 Bd6+ 25. Rg3 Bxg3+ 26. Kg1 Bxf2+ 27. Kh1 Ng3+ 28. Kg2 Bh3+ 29. Kxh3 Rxe3 30. Bf7 Rxf3 31. Qh7+ Kxh7 32. Kg2 c5 33. Bxd5 Rc3 34. Rb1 Nh1 35. Bxf2 Rg3+ 36. Kf1 Rg1+ 37. Ke2 Rf1 38. Be4+ Kh8 39. Nxc5 Ng3+ 40. Kd2 Rd1+ 41. Ke3 Nf5+ 42. Kf4 g5+ 43. Kg4 h5+ 44. Kxh5 Ng7+ 45. Kh6 Rg8 46. Bg1 Nf5+ 47. Bxf5 Rxb1 48. Bxb1 a5 49. Bh7 Rf8 50. Be4 Rf6+ 51. Kxg5 Rf1 52. Be3 Re1 53. Kf4 Rf1+ 54. Ke5 Re1 55. Bf4 Re2 1/2-1/2",
+      "timestamp": "2025-12-13T21:04:24.204321"
+    },
+    {
+      "white_network": "sfnnv9",
+      "black_network": "sfnnvkan_early_3072_15_32",
+      "result": "1/2-1/2",
+      "pgn": "[Event \"?\"]\n[Site \"?\"]\n[Date \"????.??.??\"]\n[Round \"?\"]\n[White \"sfnnv9\"]\n[Black \"sfnnvkan_early_3072_15_32\"]\n[Result \"1/2-1/2\"]\n\n1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6 6. Be3 e5 7. Nb3 Be6 8. f3 h5 9. Qd2 Nbd7 10. Nd5 Bxd5 11. exd5 g6 12. Be2 Bg7 13. Na5 Qc7 14. a3 Rh6 15. Qd3 Nf8 16. Qc3 Nxd5 17. Qxc7 Nxc7 18. Nxb7 Kd7 19. O-O-O Ke7 20. Bc5 Nb5 21. Bxd6+ Nxd6 22. g4 f6 23. f4 Bh8 24. f5 a5 25. h4 Ra7 26. Nxa5 g5 27. Nc6+ Ke8 28. hxg5 Rc7 29. Rhg1 Nf7 30. Rd8+ Nxd8 31. Kb1 Kd7 32. Bf1 Ng6 33. Nb8+ Kc8 34. Nc6 Ne6 35. gxh5 Nc5 36. b3 e4 37. Rh1 Rf7 38. Ka1 Ne6 39. gxf6 Bg7 40. Ne5 Kb8 41. fxg7 Nxg7 42. Nd7+ Kc8 43. a4 Kd8 44. Kb1 Ne6 45. Nb8 Rhh7 46. c4 Rf6 47. Nc6+ Ke8 48. Nd8 Rh6 49. Nf7 Nef4 50. c5 Nd5 51. Bc4 Rxh5 52. Nd6+ Kd8 53. Rd1 Nc3+ 54. Kc2 Rh2+ 55. Rd2 Nb1 1/2-1/2",
+      "timestamp": "2025-12-13T21:06:09.630944"
+    },
+    {
+      "white_network": "sfnnvkan_early_3072_15_32",
+      "black_network": "sfnnv9",
+      "result": "1/2-1/2",
+      "pgn": "[Event \"?\"]\n[Site \"?\"]\n[Date \"????.??.??\"]\n[Round \"?\"]\n[White \"sfnnvkan_early_3072_15_32\"]\n[Black \"sfnnv9\"]\n[Result \"1/2-1/2\"]\n\n1. d4 Nf6 2. Nf3 d5 3. c4 e6 4. Nc3 c6 5. Bg5 Be7 6. e3 Nbd7 7. cxd5 exd5 8. Qc2 O-O 9. Bd3 h6 10. Bh4 Re8 11. O-O Ne4 12. Bxe7 Qxe7 13. Nxd5 Qd6 14. Nc3 Nec5 15. g3 Qxd4 16. Bf5 Qe4 17. Nb5 Qd3 18. Qxd3 Nxd3 19. Nc7 Re5 20. Bg4 Rb5 21. h3 Nb6 22. Bxc8 Nxc8 23. e4 Nd6 24. Ne6 Rd5 25. Nc7 h5 26. Rfd1 Ne5 27. Nh2 Nf3+ 28. Kg2 Nh4+ 29. Kh1 Nf3 30. Ng4 b6 31. Ne5 Rd4 32. Rg1 Rd1 33. Nxc6 Rxg1+ 34. Rxg1 Ne5 35. Ne6 Kh7 36. Ng5+ Kh6 37. Nd8 Kg6 38. Rd1 f6 39. Nge6 Kh6 40. Nf7+ Kh7 41. Nd4 Nxe4 42. Kg1 Nd6 43. Nxe5 fxe5 44. Nf3 Nb7 45. Rd4 Re8 46. Rd5 b5 47. Nh4 Kg8 48. Ng6 Kh7 49. Rxb5 Nd6 50. Rd5 Nf5 51. Nh4 Ne7 52. Rd3 e4 53. Rd1 Rg8 54. Rf1 g5 55. Re1 Kh6 1/2-1/2",
+      "timestamp": "2025-12-13T21:07:29.170525"
+    },
+    {
+      "white_network": "sfnnv9",
+      "black_network": "sfnnvkan_early_3072_15_32",
+      "result": "0-1",
+      "pgn": "[Event \"?\"]\n[Site \"?\"]\n[Date \"????.??.??\"]\n[Round \"?\"]\n[White \"sfnnv9\"]\n[Black \"sfnnvkan_early_3072_15_32\"]\n[Result \"0-1\"]\n\n1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6 6. Be3 e5 7. Nb3 Be6 8. f3 h5 9. Qd2 Nbd7 10. Nd5 Bxd5 11. exd5 g6 12. Be2 Bg7 13. Na5 Qc7 14. a3 Ne4 15. Qd3 Ndf6 16. Rg1 Nc5 17. Bc1 Nxd3+ 18. Kd1 Nf2+ 19. Ke1 Qc3+ 20. bxc3 O-O-O 21. Bxa6 Kd7 22. Bb5+ Kc8 23. Rb1 N6e4 24. Bd7+ Kxd7 25. Ra1 Rh6 26. a4 Nd3+ 27. Kf1 b6 28. fxe4 f6 29. Nb7 Kc7 30. Bd2 Nc5 31. Rb1 Bh8 32. Nxc5 dxc5 33. Bc1 Rd6 34. Rb2 h4 35. Kf2 h3 36. Rxb6 Rh4 37. Rc6+ Kb7 38. Kg3 Rg4+ 39. Kf2 Rxg2+ 40. Rxg2 Rd7 41. Rc7+ Rxc7 42. Kf1 hxg2+ 43. Kf2 g1=R 44. d6 Rxc1 45. d7 Rxd7 46. Kf3 Kc7 47. a5 Ra1 48. Kg4 Rxa5 49. c4 Ra8 50. Kh4 Bg7 51. Kh3 Bh6 52. Kg3 Rd4 53. c3 Rxc4 54. Kf3 Rxc3+ 55. Kg2 Rc1 0-1",
+      "timestamp": "2025-12-13T21:08:24.404716"
+    },
+    {
+      "white_network": "sfnnvkan_early_3072_15_32",
+      "black_network": "sfnnv9",
+      "result": "0-1",
+      "pgn": "[Event \"?\"]\n[Site \"?\"]\n[Date \"????.??.??\"]\n[Round \"?\"]\n[White \"sfnnvkan_early_3072_15_32\"]\n[Black \"sfnnv9\"]\n[Result \"0-1\"]\n\n1. d4 Nf6 2. Nf3 d5 3. c4 e6 4. Nc3 c6 5. Bg5 Be7 6. e3 Nbd7 7. cxd5 exd5 8. Qc2 O-O 9. Bd3 Re8 10. h3 Nf8 11. O-O g6 12. Rab1 Ne6 13. Bf4 Nxd4 14. Qd1 Ne2+ 15. Kh1 Nc1 16. Ne4 Kf8 17. Rxc1 g5 18. Ned2 Bxh3 19. Ne5 Bg4 20. Qe1 Bd6 21. Nxc6 Bb8 22. Ne5 Qe7 23. Ng6+ Kg7 24. Bxb8 Qxe3 25. Bc7 Qh3+ 26. Bh2 Qxg2+ 27. Kxg2 Bh3+ 28. Kg3 Nh5+ 29. Kf3 g4# 0-1",
+      "timestamp": "2025-12-13T21:09:05.517110"
+    },
+    {
+      "white_network": "sfnnv9",
+      "black_network": "sfnnvkan_early_3072_15_32",
+      "result": "0-1",
+      "pgn": "[Event \"?\"]\n[Site \"?\"]\n[Date \"????.??.??\"]\n[Round \"?\"]\n[White \"sfnnv9\"]\n[Black \"sfnnvkan_early_3072_15_32\"]\n[Result \"0-1\"]\n\n1. d4 Nf6 2. Nf3 d5 3. c4 e6 4. Nc3 c6 5. Bg5 Be7 6. e3 Nbd7 7. Qc2 O-O 8. Rc1 a6 9. a3 b5 10. Bxf6 Bxf6 11. cxd5 cxd5 12. Bd3 g6 13. Be2 Be7 14. Nxd5 Bg5 15. Qc5 h6 16. Qb4 Qb6 17. Qxf8+ Nxf8 18. e4 Bd2+ 19. Kf1 Qc5 20. Nf6+ Kh8 21. Ng5 Qxc1+ 22. Bd1 Qxd1# 0-1",
+      "timestamp": "2025-12-13T21:09:26.198807"
+    },
+    {
+      "white_network": "sfnnvkan_early_3072_15_32",
+      "black_network": "sfnnv9",
+      "result": "1/2-1/2",
+      "pgn": "[Event \"?\"]\n[Site \"?\"]\n[Date \"????.??.??\"]\n[Round \"?\"]\n[White \"sfnnvkan_early_3072_15_32\"]\n[Black \"sfnnv9\"]\n[Result \"1/2-1/2\"]\n\n1. d4 Nf6 2. Nf3 d5 3. c4 e6 4. Nc3 c6 5. Bg5 Be7 6. e3 dxc4 7. Bxc4 Nd5 8. Bxe7 Qxe7 9. O-O O-O 10. Bd3 Nd7 11. Qb3 Re8 12. h3 h6 13. Qxd5 Ne5 14. Bh7+ Kf8 15. Qc5 Nxf3+ 16. Kh1 Ng5 17. Bc2 Kg8 18. Qe5 Qa3 19. Qxg7+ Kxg7 20. bxa3 Ne4 21. Rfc1 Ng3+ 22. Kg1 Ne2+ 23. Kf1 Rd8 24. a4 e5 25. dxe5 Rd1+ 26. Bxd1 Ng3+ 27. Kg1 Ne2+ 28. Kf1 Ng3+ 29. Kg1 Ne2+ 30. Kf1 Ng3+ 31. Kg1 Ne2+ 32. Kf1 Ng3+ 33. Kg1 Ne2+ 34. Kf1 1/2-1/2",
+      "timestamp": "2025-12-13T21:09:47.372549"
+    },
+    {
+      "white_network": "sfnnv9",
+      "black_network": "sfnnvkan_early_3072_15_32",
+      "result": "1-0",
+      "pgn": "[Event \"?\"]\n[Site \"?\"]\n[Date \"????.??.??\"]\n[Round \"?\"]\n[White \"sfnnv9\"]\n[Black \"sfnnvkan_early_3072_15_32\"]\n[Result \"1-0\"]\n\n1. d4 Nf6 2. Nf3 d5 3. c4 e6 4. Nc3 c6 5. Bg5 Be7 6. e3 h6 7. Bh4 O-O 8. Qc2 b6 9. Be2 Ba6 10. O-O Bxc4 11. Bxc4 dxc4 12. Ne5 Nd5 13. Ng6 Bc5 14. Rfc1 Qg5 15. dxc5 Qxg2+ 16. Kxg2 Nf4+ 17. Kg3 Nh5+ 18. Kf3 fxg6+ 19. Ke4 Rf4+ 20. Ke5 g5 21. Qg6 Re4+ 22. Kd6 Nf4 23. Qe8+ Kh7 24. Re1 Ng2 25. Kc7 Nd7 26. Qf7 Rd4 27. Rf1 Rc8+ 28. Kb7 Rc7+ 29. Ka8 bxc5 30. Qg8+ Kg6 31. Qxe6+ Kh7 32. Qf5+ Kh8 33. Qf7 Nb6+ 34. Kb8 Rd8+ 35. Kxc7 Na8+ 36. Kb7 Rb8+ 37. Kxc6 Rc8+ 38. Kd7 Nb6+ 39. Ke7 Nd5+ 40. Kd7 Nf6+ 41. Ke6 Rc6+ 42. Ke7 Ng8+ 43. Qxg8+ Kxg8 44. Kd8 Rd6+ 45. Ke8 Re6+ 46. Kd8 Rd6+ 47. Ke8 Rf6 48. Nd5 Rf8+ 49. Ke7 Rf7+ 50. Ke8 Nf4 51. Ne7+ Rxe7+ 52. Kxe7 c3 53. bxc3 Ng6+ 54. Kd6 c4 55. Bg3 h5 1-0",
+      "timestamp": "2025-12-13T21:11:35.572924"
+    },
+    {
+      "white_network": "sfnnvkan_early_3072_15_32",
+      "black_network": "sfnnv9",
+      "result": "1/2-1/2",
+      "pgn": "[Event \"?\"]\n[Site \"?\"]\n[Date \"????.??.??\"]\n[Round \"?\"]\n[White \"sfnnvkan_early_3072_15_32\"]\n[Black \"sfnnv9\"]\n[Result \"1/2-1/2\"]\n\n1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6 6. Be3 e5 7. Nb3 Be6 8. f3 h5 9. Qd2 Nbd7 10. Nd5 Bxd5 11. exd5 g6 12. Be2 Bg7 13. a4 Ne4 14. Qa5 Qc7 15. Bf1 Nf2 16. Bxf2 Qc3+ 17. Ke2 Qd2+ 18. Nxd2 e4 19. Qd8+ Kxd8 20. Bh4+ Kc7 21. Ke3 Bd4+ 22. Kxe4 Nf6+ 23. Kf4 Be3+ 24. Kg3 Bf2+ 25. Kh3 Bxh4 26. Kxh4 g5+ 27. Kh3 g4+ 28. Kh4 Rag8 29. f4 Ne4 30. Nf3 Nf2 31. Nd4 g3 32. f5 Nxh1 33. h3 Rg4+ 34. hxg4 hxg4+ 35. Kxg4 Nf2+ 36. Kg5 Ne4+ 37. Kg4 Nf6+ 38. Kg5 Rh5+ 39. Kxf6 Rh4 40. Bxa6 Rxd4 41. Bd3 Rxd3 42. cxd3 Kb6 43. Kxf7 Ka5 44. Ke6 b6 45. f6 Kb4 46. f7 Kb3 47. Re1 b5 48. axb5 Kc2 49. Rg1 Kxd3 50. f8=Q Ke3 51. Qxd6 Kf2 52. Qc5+ Ke2 53. Qd4 1/2-1/2",
+      "timestamp": "2025-12-13T21:12:26.350898"
+    },
+    {
+      "white_network": "sfnnv9",
+      "black_network": "sfnnvkan_early_3072_15_32",
+      "result": "1/2-1/2",
+      "pgn": "[Event \"?\"]\n[Site \"?\"]\n[Date \"????.??.??\"]\n[Round \"?\"]\n[White \"sfnnv9\"]\n[Black \"sfnnvkan_early_3072_15_32\"]\n[Result \"1/2-1/2\"]\n\n1. e4 c6 2. d4 d5 3. Nc3 dxe4 4. Nxe4 Nf6 5. Nxf6+ gxf6 6. Nf3 Bg4 7. Be2 Nd7 8. O-O Rg8 9. Qd3 h5 10. a4 Qa5 11. Bd2 b5 12. Ra2 Qxa4 13. Qa3 Rb8 14. Raa1 Rb7 15. Ra2 e5 16. Qe7+ Kxe7 17. Bb4+ Nc5 18. Bxc5+ Ke6 19. d5+ Kf5 20. Ba3 Ke4 21. Bd3+ Kf4 22. g3+ Kxf3 23. Bxf8 cxd5 24. Rxa4 e4 25. Rd4 Bh3 26. Bc5 h4 27. Bxe4+ dxe4 28. Rfd1 Rxg3+ 29. hxg3 hxg3 30. Bf8 e3 31. Rd6 f5 32. R1d3 gxf2+ 33. Kh2 f1=B 34. Re6 Kg4 35. Rexe3 f4 36. Rxh3 f3 37. Rd4+ Kg5 38. Rg3+ Kh5 39. Rd5+ Kh4 40. Rh5+ Kxh5 41. Rxf3 Be2 42. Rf6 Kg5 43. Rf2 Bd1 44. Rg2+ Kf6 45. Rd2 Rc7 46. Rxd1 Rxc2+ 47. Rd2 Rxd2+ 48. Kh3 Rh2+ 49. Kxh2 Kg6 50. Bc5 Kh6 51. Bxa7 f5 52. Kg3 Kh7 53. Kf4 Kh8 54. Kxf5 Kh7 55. Bd4 Kh6 1/2-1/2",
+      "timestamp": "2025-12-13T21:13:17.278725"
+    },
+    {
+      "white_network": "sfnnvkan_early_3072_15_32",
+      "black_network": "sfnnv9",
+      "result": "1/2-1/2",
+      "pgn": "[Event \"?\"]\n[Site \"?\"]\n[Date \"????.??.??\"]\n[Round \"?\"]\n[White \"sfnnvkan_early_3072_15_32\"]\n[Black \"sfnnv9\"]\n[Result \"1/2-1/2\"]\n\n1. d4 Nf6 2. Nf3 d5 3. c4 e6 4. Nc3 c6 5. Bg5 Be7 6. e3 O-O 7. Bd3 h6 8. Bxf6 Bxf6 9. Rc1 Nd7 10. cxd5 exd5 11. b4 Be7 12. b5 Ba3 13. Bh7+ Kh8 14. bxc6 Qg5 15. Ra1 Bc1 16. Ne2 Qxg2 17. Nf4 Qg1+ 18. Ke2 Qe1+ 19. Kd3 Qd2+ 20. Nxd2 Ne5+ 21. Ke2 Bg4+ 22. Nf3 Bxf3+ 23. Kf1 Be2+ 24. Ke1 Nd3+ 25. Kxe2 Nxf4+ 26. Kf3 Bxe3 27. Qe2 Bc1 28. Bd3 Rae8 29. cxb7 Re3+ 30. Kg4 f5+ 31. Bxf5 h5+ 32. Kh4 Ng6+ 33. Bxg6 Rh3+ 34. Kxh3 Bh6 35. Bh7 Kxh7 36. Qc2+ g6 37. Qc7+ Bg7 38. Qxg7+ Kxg7 39. b8=Q Rf3+ 40. Kg2 Rf7 41. Qe5+ Kh7 42. Rab1 Rf5 43. Qe3 h4 44. Rhc1 Rg5+ 45. Qxg5 h3+ 46. Kf3 a5 47. Rb7+ Kh8 48. Qxg6 a4 49. a3 1/2-1/2",
+      "timestamp": "2025-12-13T21:14:48.575266"
+    },
+    {
+      "white_network": "sfnnv9",
+      "black_network": "sfnnvkan_early_3072_15_32",
+      "result": "1-0",
+      "pgn": "[Event \"?\"]\n[Site \"?\"]\n[Date \"????.??.??\"]\n[Round \"?\"]\n[White \"sfnnv9\"]\n[Black \"sfnnvkan_early_3072_15_32\"]\n[Result \"1-0\"]\n\n1. d4 Nf6 2. Nf3 d5 3. c4 e6 4. Nc3 c6 5. Bg5 Be7 6. e3 Nbd7 7. Rc1 O-O 8. Bd3 a6 9. cxd5 exd5 10. O-O Re8 11. Qc2 Nf8 12. Rb1 Bf5 13. Nxd5 Kh8 14. Bxf5 Nxd5 15. Ne5 Kg8 16. e4 Nb4 17. Qc4 Nd5 18. Bh6 g6 19. Bc1 Bh4 20. Rd1 b5 21. Qc2 Nb4 22. Qd2 Qd7 23. g4 Bg3 24. Kh1 Bf4 25. Be6 Kg7 26. a3 Na2 27. Qc2 f6 28. Bd5 Nb4 29. Qc3 Bd2 30. Qxc6 Qxd5 31. Qc7+ Nd7 32. f3 Qd6 33. Qxd7+ Re7 34. Qxe7+ Qxe7 35. d5 Qd7 36. Nf7 Qd6 37. e5 f5 38. gxf5 g5 39. b3 Qb8 40. Bb2 Nc2 41. e6+ Kg8 42. Nh6+ Kf8 43. d6 Ne3 44. Bg7+ Ke8 45. d7+ Kd8 46. Bf6+ Kc7 47. Be5+ Kb7 48. Ba1 Qf8 49. Nf7 g4 50. e7 Re8 51. Nd6+ Kb6 52. Bd4+ Ka5 53. Nb7# 1-0",
+      "timestamp": "2025-12-13T21:17:00.456012"
+    },
+    {
+      "white_network": "sfnnvkan_early_3072_15_32",
+      "black_network": "sfnnv9",
+      "result": "1-0",
+      "pgn": "[Event \"?\"]\n[Site \"?\"]\n[Date \"????.??.??\"]\n[Round \"?\"]\n[White \"sfnnvkan_early_3072_15_32\"]\n[Black \"sfnnv9\"]\n[Result \"1-0\"]\n\n1. e4 c6 2. d4 d5 3. e5 Bf5 4. Nf3 e6 5. Be2 Nd7 6. O-O Ne7 7. c3 h6 8. Nbd2 Qc7 9. Re1 O-O-O 10. a4 g5 11. Nf1 f6 12. exf6 Ng6 13. g3 Qxg3+ 14. fxg3 g4 15. Kg2 Nh4+ 16. Kh1 gxf3 17. Bd3 Bxd3 18. Rxe6 Be2 19. Qd2 Nc5 20. dxc5 f2 21. Qf4 Bf3+ 22. Qxf3 Nxf3 23. h3 Kd7 24. Re2 Ng1 25. Re5 Nf3 26. Rf5 Kc7 27. Bf4+ Kd7 28. Bd6 d4 29. c4 Rh7 30. Rd1 Ke6 31. Rf4 Rf7 32. Be7 Ne5 33. Bd6 Nd3 34. Re4+ Kd7 35. Bxf8 Rdxf8 36. Rxd4+ Kc7 37. Ne3 f1=N 38. R1xd3 Rxf6 39. Kg1 R8f7 40. Ng4 Rf3 41. Kh1 Rg7 42. Rd1 Ne3 43. Ne5 Rf1+ 44. Rxf1 Nxf1 45. Rd7+ Rxd7 46. Kg1 Nh2 47. Nxd7 b6 48. Kxh2 Kb7 49. cxb6 a6 50. g4 c5 51. Kg3 Kc6 52. Ne5+ Kb7 53. Kf4 h5 54. gxh5 Kc8 55. h6 Kb8 1-0",
+      "timestamp": "2025-12-13T21:18:01.629264"
+    },
+    {
+      "white_network": "sfnnv9",
+      "black_network": "sfnnvkan_early_3072_15_32",
+      "result": "1/2-1/2",
+      "pgn": "[Event \"?\"]\n[Site \"?\"]\n[Date \"????.??.??\"]\n[Round \"?\"]\n[White \"sfnnv9\"]\n[Black \"sfnnvkan_early_3072_15_32\"]\n[Result \"1/2-1/2\"]\n\n1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6 6. Be3 e5 7. Nb3 Be6 8. f3 h5 9. Qd2 Nbd7 10. Nd5 Bxd5 11. exd5 g6 12. Be2 Bg7 13. Na5 Qc7 14. Bg5 Nh7 15. Bh4 Rf8 16. Qb4 Qc3+ 17. Qxc3 g5 18. Qxe5+ Bxe5 19. Bg3 h4 20. Nxb7 Bc3+ 21. Kd1 Be5 22. Bd3 Nhf6 23. Be1 Rb8 24. Bf2 Nc5 25. b3 Ke7 26. Na5 Nfe4 27. Bxc5 Nc3+ 28. Kc1 Bf4+ 29. Be3 Ne2+ 30. Kd1 Nc3+ 31. Kc1 Nxa2+ 32. Kd1 Nc3+ 33. Kc1 Ne2+ 34. Kb1 Rxb3+ 35. Nxb3 Nc3+ 36. Kb2 Na4+ 37. Ka2 Nc3+ 38. Kb2 Nd1+ 39. Ka2 Nc3+ 40. Kb2 Nd1+ 41. Ka2 Nc3+ 42. Kb2 Nd1+ 43. Ka2 Nc3+ 44. Kb2 1/2-1/2",
+      "timestamp": "2025-12-13T21:18:47.647052"
+    },
+    {
+      "white_network": "sfnnvkan_early_3072_15_32",
+      "black_network": "sfnnv9",
+      "result": "1-0",
+      "pgn": "[Event \"?\"]\n[Site \"?\"]\n[Date \"????.??.??\"]\n[Round \"?\"]\n[White \"sfnnvkan_early_3072_15_32\"]\n[Black \"sfnnv9\"]\n[Result \"1-0\"]\n\n1. d4 Nf6 2. Nf3 d5 3. c4 e6 4. Nc3 c6 5. Bg5 Be7 6. e3 Nbd7 7. Rc1 O-O 8. Bd3 dxc4 9. Bxc4 Nd5 10. Bxe7 Qxe7 11. O-O b6 12. Nxd5 exd5 13. Bd3 h5 14. Ne5 Nb8 15. Bg6 Be6 16. Nxc6 Qh4 17. Nxb8 Qxh2+ 18. Kxh2 fxg6 19. Rc8 Rxc8 20. Kg3 g5 21. Na6 h4+ 22. Kf3 Rf8+ 23. Ke2 Bg4+ 24. Ke1 Rxf2 25. Qb3 Re2+ 26. Kd1 Rd2+ 27. Ke1 Rd1+ 28. Qxd1 Bxd1 29. Kxd1 Rf8 30. Nb4 Rxf1+ 31. Ke2 Re1+ 32. Kxe1 Kh8 33. Kf2 g6 34. Nxd5 b5 35. Kg1 b4 36. Nxb4 Kh7 37. d5 Kh8 38. d6 h3 39. Nd5 hxg2 40. d7 g4 41. d8=Q+ Kh7 42. Qg5 a6 43. Nf6+ Kg7 44. Kxg2 g3 45. Ng4 Kh7 46. Qd8 Kg7 47. a3 Kf7 48. a4 Ke6 49. a5 Kf7 50. b4 Ke6 51. Kf3 g2 52. Kxg2 Kf5 53. Kf3 Ke6 54. Kf4 Kf7 55. Kg5 Kg7 1-0",
+      "timestamp": "2025-12-13T21:19:47.339413"
+    },
+    {
+      "white_network": "sfnnv9",
+      "black_network": "sfnnvkan_early_3072_15_32",
+      "result": "1/2-1/2",
+      "pgn": "[Event \"?\"]\n[Site \"?\"]\n[Date \"????.??.??\"]\n[Round \"?\"]\n[White \"sfnnv9\"]\n[Black \"sfnnvkan_early_3072_15_32\"]\n[Result \"1/2-1/2\"]\n\n1. d4 Nf6 2. Nf3 d5 3. c4 e6 4. Nc3 c6 5. Bg5 Be7 6. e3 O-O 7. Qc2 Nbd7 8. Bd3 h6 9. Bh4 dxc4 10. Bxc4 b5 11. Bd3 Bb7 12. O-O b4 13. Qb3 Ne8 14. Bxe7 bxc3 15. Qxc3 Ne5 16. Bb4 a5 17. Ba3 Ba6 18. Bh7+ Kh8 19. Nd2 Rg8 20. Qc1 Qxd4 21. Nb3 Qd1 22. h3 Qxf1+ 23. Qxf1 Nf3+ 24. Kh1 Kxh7 25. Qb1+ Kh8 26. g4 Bd3 27. Bc5 Nd2 28. Qd1 Be2 29. Qg1 Bf3+ 30. Qg2 Nc4 31. Kh2 Nf6 32. Qg1 Bd1 33. g5 Ng4+ 34. Kg2 Nxb2 35. e4 Ne3+ 36. Kh2 Nf1+ 37. Kh1 Bf3+ 38. Qg2 Bxg2+ 39. Kg1 Raf8 40. Bxf8 Nd1 41. Rxd1 Bf3 42. Rxf1 a4 43. Bb4 Bxe4 44. Re1 Bc2 45. Rc1 Be4 46. Rc4 Bd5 47. Rh4 Rb8 48. Bd6 Rd8 49. Bg3 c5 50. Nc1 Rd7 51. Be5 f6 52. Bxf6 Kg8 53. gxh6 a3 54. h7+ Kh8 55. Ba1 e5 1/2-1/2",
+      "timestamp": "2025-12-13T21:21:01.548482"
+    },
+    {
+      "white_network": "sfnnvkan_early_3072_15_32",
+      "black_network": "sfnnv9",
+      "result": "0-1",
+      "pgn": "[Event \"?\"]\n[Site \"?\"]\n[Date \"????.??.??\"]\n[Round \"?\"]\n[White \"sfnnvkan_early_3072_15_32\"]\n[Black \"sfnnv9\"]\n[Result \"0-1\"]\n\n1. d4 Nf6 2. Nf3 d5 3. c4 e6 4. Nc3 c6 5. Bg5 Be7 6. e3 Nbd7 7. Bd3 h6 8. Bxf6 Nxf6 9. O-O dxc4 10. Bxc4 O-O 11. Qc2 Qc7 12. Ne4 b6 13. a4 Qxh2+ 14. Kxh2 Ng4+ 15. Kh3 Nxf2+ 16. Kh2 Bd6+ 17. Ne5 Ng4+ 18. Kg3 Bxe5+ 19. Kxg4 f5+ 20. Kh5 g6+ 21. Kxh6 Bf4+ 22. Kxg6 Kh8 23. Qe2 Rf6+ 24. Kh5 Rh6# 0-1",
+      "timestamp": "2025-12-13T21:21:23.956778"
+    },
+    {
+      "white_network": "sfnnv9",
+      "black_network": "sfnnvkan_early_3072_15_32",
+      "result": "0-1",
+      "pgn": "[Event \"?\"]\n[Site \"?\"]\n[Date \"????.??.??\"]\n[Round \"?\"]\n[White \"sfnnv9\"]\n[Black \"sfnnvkan_early_3072_15_32\"]\n[Result \"0-1\"]\n\n1. d4 Nf6 2. Nf3 d5 3. c4 e6 4. Nc3 c6 5. Bg5 Be7 6. e3 Nbd7 7. Bd3 dxc4 8. Bxc4 b5 9. Bd3 a6 10. O-O Bb7 11. Nxb5 Nh5 12. a4 Nf8 13. Ra2 Qa5 14. Nd6+ Kd7 15. Ne5+ Qxe5 16. Bf4 f6 17. Qb3 Qb5 18. Nf7 Ra7 19. a5 Qb4 20. Qxe6+ Ke8 21. Qxe7+ Kxe7 22. Bc7 Qb6 23. Bg3 Ke6 24. Bxa6 Kd5 25. Bc4+ Kxc4 26. h4 Qc7 27. f4 Kd3 28. e4 Kc2 29. b3+ Kxb3 30. Kf2 Qxf4+ 31. Ke2 Qf2+ 32. Rxf2 Kb4 33. Bd6+ Kb3 34. Ra3+ Kc4 35. Kf1 Ba8 36. Rc2+ Kxd4 37. Bc5+ Kxe4 38. Re3+ Kd5 39. Re5+ fxe5 40. Kg1 g5 41. Bb4 Ng7 42. Rc5+ Kd4 43. Kf1 Bb7 44. Rd5+ Ke3 45. Bd2+ Ke4 46. Rxe5+ Kd3 47. Be3 Ba8 48. h5 Rxf7+ 49. Rf5 Rxf5+ 50. Kg1 Kxe3 51. g4 Rxa5 52. h6 Nf5 53. gxf5 Kf4 54. Kf2 Nd7 55. f6 Ne5 0-1",
+      "timestamp": "2025-12-13T21:22:41.609758"
+    },
+    {
+      "white_network": "sfnnvkan_early_3072_15_32",
+      "black_network": "sfnnv9",
+      "result": "1-0",
+      "pgn": "[Event \"?\"]\n[Site \"?\"]\n[Date \"????.??.??\"]\n[Round \"?\"]\n[White \"sfnnvkan_early_3072_15_32\"]\n[Black \"sfnnv9\"]\n[Result \"1-0\"]\n\n1. d4 Nf6 2. Nf3 d5 3. c4 e6 4. Nc3 c6 5. Bg5 Be7 6. e3 Nbd7 7. Rc1 O-O 8. Bd3 dxc4 9. Bxc4 Nd5 10. Bxe7 Qxe7 11. Ne4 N5f6 12. Nxf6+ Qxf6 13. Bxe6 h6 14. a3 Qg6 15. Bg4 Qc2 16. Qd2 Qd1+ 17. Rxd1 Ne5 18. Ke2 Bxg4 19. e4 Nxf3 20. Ke3 Rae8 21. a4 Bh5 22. h3 f6 23. g3 Rxe4+ 24. Kxe4 Re8+ 25. Kd3 Bg6+ 26. Kc3 Re3+ 27. Kb4 Rb3+ 28. Kc5 Rb5+ 29. Kd6 Rxb2 30. Qf4 Rb6 31. Ke7 Nxd4 32. Rhe1 Bh5 33. Qb8+ Kh7 34. Qg8+ Kg6 35. Qe8+ Kh7 36. Ra1 Nf5+ 37. Kf8 Bg6 38. Qe7 Kh8 39. Qf7 h5 40. Qg8# 1-0",
+      "timestamp": "2025-12-13T21:23:21.726807"
+    },
+    {
+      "white_network": "sfnnv9",
+      "black_network": "sfnnvkan_early_3072_15_32",
+      "result": "1-0",
+      "pgn": "[Event \"?\"]\n[Site \"?\"]\n[Date \"????.??.??\"]\n[Round \"?\"]\n[White \"sfnnv9\"]\n[Black \"sfnnvkan_early_3072_15_32\"]\n[Result \"1-0\"]\n\n1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6 6. Be3 e5 7. Nb3 Be6 8. f3 h5 9. Qd2 Nbd7 10. Nd5 Bxd5 11. exd5 g6 12. Be2 Bg7 13. Na5 Qc7 14. Bg5 Nh7 15. Bh4 Rf8 16. Qb4 Qc3+ 17. Qxc3 g5 18. Qxe5+ Bxe5 19. Bg3 h4 20. Nxb7 Bc3+ 21. Kd1 Be5 22. Bd3 Nhf6 23. Be1 Ke7 24. Nxd6 h3 25. Nf5+ Ke8 26. Ng7+ Kd8 27. Ne6+ Ke7 28. Bb4+ Ke8 29. Ng7+ Kd8 30. Be7+ Kc7 31. Ne6+ Kb8 32. Bd6+ Kc8 33. Bxa6+ Rxa6 34. Ke2 Ra5 35. Bb4 Ne4 36. Be7 Nc3+ 37. Kf2 Bd4+ 38. Kf1 hxg2+ 39. Kxg2 Rxa2 40. Nxg5 Nb1 41. Raxb1 Rg8 42. b4 Ra1 43. Kf1 Rxb1+ 44. Ke2 Bf2 45. Ne4 Rg5 46. Nd6+ Kb8 47. Nxf7 Re1+ 48. Kxf2 Rg2+ 49. Kxg2 Re2+ 50. Kg1 Re1+ 51. Kg2 Re2+ 52. Kg1 Re1+ 53. Kg2 Re2+ 54. Kg1 Re1+ 55. Kg2 Re2+ 1-0",
+      "timestamp": "2025-12-13T21:24:30.165777"
+    },
+    {
+      "white_network": "sfnnvkan_early_3072_15_32",
+      "black_network": "sfnnv9",
+      "result": "1/2-1/2",
+      "pgn": "[Event \"?\"]\n[Site \"?\"]\n[Date \"????.??.??\"]\n[Round \"?\"]\n[White \"sfnnvkan_early_3072_15_32\"]\n[Black \"sfnnv9\"]\n[Result \"1/2-1/2\"]\n\n1. d4 Nf6 2. Nf3 d5 3. c4 e6 4. Nc3 c6 5. Bg5 Be7 6. Qb3 h6 7. Bxf6 Bxf6 8. O-O-O Rh7 9. cxd5 Be7 10. dxc6 Bg5+ 11. Rd2 Nxc6 12. Qb5 Qf6 13. Qxc6+ Bd7 14. Qxd7+ Kxd7 15. e3 Kd6 16. Bd3 Qf5 17. a4 Be7 18. a5 a6 19. Ne5 Rd8 20. Nb5+ axb5 21. Rc2 f6 22. Nf7+ Kd5 23. Rc5+ Bxc5 24. e4+ Kxd4 25. e5 Qg5+ 26. Kd1 Qd2+ 27. Kxd2 b4 28. f4 Rhh8 29. Ke2 Ba7 30. exf6 b3 31. Kd2 Kd5 32. g4 Kc5 33. Rf1 b5 34. a6 Rd7 35. Ne5 Kb4 36. fxg7 Bd4 37. Ke1 Bf2+ 38. Kd1 Bd4 39. Nf7 Rc7 40. Re1 Rc2 41. Re4 Rd2+ 42. Ke1 Rd1+ 43. Ke2 Re1+ 44. Kf3 Re3+ 45. Kg2 Rg3+ 46. Kf1 Rf3+ 47. Kg2 Rf2+ 48. Kg3 Rg2+ 49. Kf3 Rg3+ 50. Ke2 Re3+ 51. Kd2 Re2+ 52. Kc1 Re1+ 53. Kd2 Rd1+ 54. Ke2 Ka5 55. Ng5 Rd2+ 1/2-1/2",
+      "timestamp": "2025-12-13T21:26:22.285289"
+    },
+    {
+      "white_network": "sfnnv9",
+      "black_network": "sfnnvkan_early_3072_15_32",
+      "result": "1-0",
+      "pgn": "[Event \"?\"]\n[Site \"?\"]\n[Date \"????.??.??\"]\n[Round \"?\"]\n[White \"sfnnv9\"]\n[Black \"sfnnvkan_early_3072_15_32\"]\n[Result \"1-0\"]\n\n1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6 6. Be3 e5 7. Nb3 Be6 8. f3 h5 9. Qd2 Nbd7 10. Nd5 Bxd5 11. exd5 g6 12. Be2 Bg7 13. Na5 Qc7 14. Bg5 Nh7 15. Bh4 Rf8 16. Qb4 Qc3+ 17. Qxc3 g5 18. Qxe5+ Bxe5 19. Bg3 h4 20. Nxb7 Bc3+ 21. Kd1 Be5 22. Bd3 Nhf6 23. Be1 Ke7 24. Nxd6 h3 25. Nf5+ Ke8 26. Ng7+ Kd8 27. Ne6+ Ke7 28. Bb4+ Ke8 29. Ng7+ Kd8 30. Be7+ Kc7 31. Ne6+ Kb8 32. Bd6+ Kc8 33. Bxa6+ Rxa6 34. Ke2 Ra5 35. Bb4 Ne4 36. Be7 Nc3+ 37. bxc3 hxg2 38. Nc7 Kb8 39. Bf6 Ra8 40. Raf1 Bg3 41. Rb1+ Kc8 42. Rb8+ Kxc7 43. Rhb1 Be1 44. Be5+ Nxe5 45. R1b6 g1=N+ 46. Kf1 Ng4 47. R8b7+ Kc8 48. fxg4 Ra7 49. Kg2 Bg3 50. hxg3 f5 51. Rc6+ Kd8 52. Rc8+ Kxc8 53. Rxa7 Kb8 54. Rd7 Rd8 55. Rxd8+ Ka7 1-0",
+      "timestamp": "2025-12-13T21:26:55.864923"
+    },
+    {
+      "white_network": "sfnnvkan_early_3072_15_32",
+      "black_network": "sfnnv9",
+      "result": "1/2-1/2",
+      "pgn": "[Event \"?\"]\n[Site \"?\"]\n[Date \"????.??.??\"]\n[Round \"?\"]\n[White \"sfnnvkan_early_3072_15_32\"]\n[Black \"sfnnv9\"]\n[Result \"1/2-1/2\"]\n\n1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6 6. Be3 e5 7. Nb3 Be6 8. f3 h5 9. Qd2 Nbd7 10. Nd5 Bxd5 11. exd5 g6 12. Be2 Bg7 13. a4 Ne4 14. Qa5 Ng3 15. hxg3 Qxa5+ 16. Nxa5 b6 17. Bg1 bxa5 18. Kd2 h4 19. Be3 Nb6 20. Rxh4 Nc4+ 21. Kd3 Rh5 22. Kc3 e4+ 23. Bd4 Rc8 24. Rhh1 Nd2+ 25. Bc4 Rh6 26. Rhe1 Rxc4+ 27. Kxd2 Rxc2+ 28. Ke3 Re2+ 29. Kf4 Rh4+ 30. Kg5 Bf6+ 31. Kxf6 Rh5 32. Rxe2 Kd8 33. Rxe4 Rh7 34. g4 Kd7 35. Re7+ Kd8 36. Ra7 g5 37. Rc1 Rh6+ 38. Kg7 Rg6+ 39. Kf8 f6 40. Kf7 Rh6 41. Bxf6+ Rxf6+ 42. Kxf6 Ke8 43. Ra8+ Kd7 44. Rc6 1/2-1/2",
+      "timestamp": "2025-12-13T21:27:50.548809"
+    },
+    {
+      "white_network": "sfnnv9",
+      "black_network": "sfnnvkan_early_3072_15_32",
+      "result": "1/2-1/2",
+      "pgn": "[Event \"?\"]\n[Site \"?\"]\n[Date \"????.??.??\"]\n[Round \"?\"]\n[White \"sfnnv9\"]\n[Black \"sfnnvkan_early_3072_15_32\"]\n[Result \"1/2-1/2\"]\n\n1. d4 Nf6 2. Nf3 d5 3. c4 e6 4. Nc3 c6 5. Bg5 Be7 6. e3 Nbd7 7. cxd5 exd5 8. Qc2 Nf8 9. Ne4 g6 10. Nxf6+ Bxf6 11. Bh6 Bf5 12. Qxf5 Qa5+ 13. Nd2 Be7 14. Qg5 f6 15. Qxg6+ Kd8 16. Qe8+ Kxe8 17. Bg7 Qxd2+ 18. Kxd2 Ne6 19. Bxf6 h5 20. f4 Bb4+ 21. Kc1 Be7 22. Kd2 h4 23. Be5 Bb4+ 24. Kc1 Bd2+ 25. Kb1 Ke7 26. b3 Rhb8 27. Kb2 Bc1+ 28. Kb1 Rg8 29. Bc4 Bd2 30. g3 Be1 31. Bxd5 Bxg3 32. Bxc6 Nxd4 33. Bxd4 bxc6 34. Bc5+ Ke6 35. Re1 Bf2 36. Kc2 Kf7 37. e4 Bd4 38. Red1 h3 39. b4 a5 40. Bd6 Ra6 41. Kd2 Bb2 42. b5 Rg2+ 43. Ke1 Re2+ 44. Kf1 Re1+ 45. Kf2 Rf1+ 46. Ke2 Rh1 47. Rd4 Rc1 48. Kf2 Rf1+ 49. Kg3 cxb5 50. Bf8 Ke6 51. Rd8 Ra8 52. Rxa8 Rxa1 53. f5+ Kf7 54. Kf4 Bh8 55. Bg7 Rf1+ 1/2-1/2",
+      "timestamp": "2025-12-13T21:29:02.871936"
+    },
+    {
+      "white_network": "sfnnvkan_early_3072_15_32",
+      "black_network": "sfnnv9",
+      "result": "1-0",
+      "pgn": "[Event \"?\"]\n[Site \"?\"]\n[Date \"????.??.??\"]\n[Round \"?\"]\n[White \"sfnnvkan_early_3072_15_32\"]\n[Black \"sfnnv9\"]\n[Result \"1-0\"]\n\n1. d4 Nf6 2. Nf3 d5 3. c4 e6 4. Nc3 c6 5. Bg5 Be7 6. e3 Nbd7 7. cxd5 exd5 8. Qc2 O-O 9. Bd3 Re8 10. O-O Nf8 11. Rae1 Ne4 12. Bxe7 Qxe7 13. Nd1 Ng3 14. Ne5 Ne2+ 15. Kh1 Bf5 16. Nxc6 Qc7 17. Ne7+ Rxe7 18. Be4 Qc3 19. h4 Ng1 20. Kxg1 Qc4 21. Qc3 Qxa2 22. Bf3 Rc7 23. Qd2 Rc2 24. Qc3 Bd7 25. Qb3 Bb5 26. Qb4 Qa3 27. Qc3 Qa2 28. Qb4 Re2 29. Rxe2 Bxe2 30. Qxf8+ Rxf8 31. Nc3 Qa1 32. Nxe2 Qa2 33. Nf4 h5 34. Ra1 Qxb2 35. Rxa7 Qb1+ 36. Kh2 f6 37. Rxb7 Qc2 38. Bxd5+ Kh8 39. Ng6+ Kh7 40. Nxf8+ Kh6 41. Kg1 Qc1+ 42. Kh2 Qc2 43. Kg3 Qc8 44. Rf7 Qg4+ 45. Kh2 Qxh4+ 46. Kg1 Qg5 47. Rd7 h4 48. Ne6 h3 49. Nxg5 Kxg5 50. Rxg7+ Kh6 51. Rc7 hxg2 52. e4 Kh5 53. Be6 f5 54. Bxf5 Kh6 55. Rh7+ Kg5 1-0",
+      "timestamp": "2025-12-13T21:30:10.149323"
+    },
+    {
+      "white_network": "sfnnv9",
+      "black_network": "sfnnvkan_early_3072_15_32",
+      "result": "1-0",
+      "pgn": "[Event \"?\"]\n[Site \"?\"]\n[Date \"????.??.??\"]\n[Round \"?\"]\n[White \"sfnnv9\"]\n[Black \"sfnnvkan_early_3072_15_32\"]\n[Result \"1-0\"]\n\n1. d4 Nf6 2. Nf3 d5 3. c4 e6 4. Nc3 c6 5. Bg5 Be7 6. e3 Nbd7 7. Qc2 O-O 8. Rd1 h6 9. Bh4 b6 10. Bd3 Ba6 11. b3 Rc8 12. O-O c5 13. Nxd5 Kh8 14. Nf4 Ne5 15. Ng6+ fxg6 16. Qd2 Nxf3+ 17. gxf3 Qxd4 18. Be4 Nd7 19. Bxe7 Ne5 20. Qc2 Qd2 21. f4 Qd3 22. h3 Nf3+ 23. Kg2 Nd4 24. Bxd3 Nxc2 25. Kh1 Rcd8 26. Bd6 Rfe8 27. Bxg6 Bb7+ 28. Kg1 Rxd6 29. Bf5 Na1 30. Rxd6 exf5 31. Rdd1 Ba6 32. Rd8 Kh7 33. Rd5 Rf8 34. Kh2 Rf7 35. Rd3 Rd7 36. Rc3 Rd3 37. Rxd3 Nc2 38. Kg2 Bb7+ 39. f3 Bxf3+ 40. Kxf3 h5 41. Rdd1 h4 42. Ke2 Nb4 43. Rd2 Kg6 44. a3 Na6 45. b4 Kh5 46. bxc5 Nxc5 47. Rd5 Ne4 48. Rg1 Nc3+ 49. Kd3 Nxd5 50. cxd5 b5 51. d6 Kh6 52. d7 b4 53. d8=Q bxa3 54. Qg5+ Kh7 55. Qg6+ Kg8 1-0",
+      "timestamp": "2025-12-13T21:31:19.286069"
+    },
+    {
+      "white_network": "sfnnvkan_early_3072_15_32",
+      "black_network": "sfnnv9",
+      "result": "1/2-1/2",
+      "pgn": "[Event \"?\"]\n[Site \"?\"]\n[Date \"????.??.??\"]\n[Round \"?\"]\n[White \"sfnnvkan_early_3072_15_32\"]\n[Black \"sfnnv9\"]\n[Result \"1/2-1/2\"]\n\n1. d4 Nf6 2. Nf3 d5 3. c4 e6 4. Nc3 c6 5. Bg5 Be7 6. e3 h6 7. Bxf6 Bxf6 8. Bd3 O-O 9. Rc1 Nd7 10. O-O dxc4 11. Bxc4 e5 12. h3 exd4 13. Rc2 g6 14. Ne2 Be7 15. Bxf7+ Kg7 16. exd4 Bg5 17. Bg8 a5 18. Bb3 Bh4 19. Ng3 Bg5 20. Bf7 Qe7 21. Nh4 Qe1 22. Nhf5+ Kh8 23. Ne2 Qxf2+ 24. Kxf2 Be3+ 25. Kf3 Ne5+ 26. Kg3 Bf4+ 27. Kh4 Bg3+ 28. Nexg3 g5+ 29. Kh5 Bxf5 30. Be6 Bg4+ 31. Kxh6 Rf6+ 32. Kxg5 Nf3+ 33. gxf3 Rg6+ 34. Kh4 Rh6+ 35. Kg5 Rg8+ 36. Kf4 Rf6+ 37. Ke5 Rg5+ 38. Kd6 Rd5+ 39. Ke7 Rf7+ 40. Ke8 Re7+ 41. Kf8 Rd8+ 42. Kxe7 Re8+ 43. Kxe8 Bxe6 44. Kd8 a4 45. Kc7 Bxa2 46. Rc3 b5 47. Kxc6 b4 48. Re3 a3 49. bxa3 b3 50. Rxb3 Kh7 51. Qc2+ Kg8 52. Qxa2 Kh8 53. Rb7 1/2-1/2",
+      "timestamp": "2025-12-13T21:32:30.146287"
+    },
+    {
+      "white_network": "sfnnv9",
+      "black_network": "sfnnvkan_early_3072_15_32",
+      "result": "0-1",
+      "pgn": "[Event \"?\"]\n[Site \"?\"]\n[Date \"????.??.??\"]\n[Round \"?\"]\n[White \"sfnnv9\"]\n[Black \"sfnnvkan_early_3072_15_32\"]\n[Result \"0-1\"]\n\n1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6 6. Be3 e5 7. Nb3 Be6 8. f3 h5 9. Qd2 Nbd7 10. Nd5 Bxd5 11. exd5 g6 12. Be2 Bg7 13. Na5 Qc7 14. Bg5 Nh7 15. Bh4 Bh6 16. Qxh6 Qc5 17. Qf8+ Ndxf8 18. Bb5+ Qc6 19. Nxc6 axb5 20. Bg3 Rxa2 21. Bxe5 b4 22. Nxb4 Ra4 23. Nd3 Re4+ 24. Kf2 Re2+ 25. Kg3 Nd7 26. Ra8+ Ke7 27. Re8+ Kxe8 28. Ra1 Rf2 29. Ra7 h4+ 30. Kxf2 Nhf6 31. Ra8+ Ke7 32. Re8+ Kxe8 33. Bxf6 Rf8 34. Bg5 f5 35. Nf4 Rg8 36. Nh3 f4 37. Ng1 Nb8 38. Nh3 Nd7 39. Nxf4 Kf8 40. Bxh4 g5 41. Ne6+ Ke8 42. Nxg5 Nb6 43. Ne6 Nxd5 44. Nc7+ Nxc7 45. Bg5 Rxg5 46. h4 Rg7 47. h5 Rf7 48. h6 Rh7 49. g4 Kf8 50. g5 Rh8 51. g6 Rxh6 52. g7+ Kg8 53. Kf1 Re6 54. f4 Rf6 55. f5 d5 0-1",
+      "timestamp": "2025-12-13T21:33:10.272070"
+    },
+    {
+      "white_network": "sfnnvkan_early_3072_15_32",
+      "black_network": "sfnnv9",
+      "result": "1-0",
+      "pgn": "[Event \"?\"]\n[Site \"?\"]\n[Date \"????.??.??\"]\n[Round \"?\"]\n[White \"sfnnvkan_early_3072_15_32\"]\n[Black \"sfnnv9\"]\n[Result \"1-0\"]\n\n1. e4 c6 2. d4 d5 3. e5 Bf5 4. Nf3 e6 5. Be2 c5 6. c3 Nc6 7. O-O cxd4 8. cxd4 Nge7 9. a3 Bg4 10. Nbd2 Nf5 11. b4 Be7 12. h3 Bxf3 13. Re1 Qa5 14. Bb5 Qxa3 15. Nxf3 Qc3 16. Ra6 O-O 17. Ra2 Qc2 18. Ra4 Rfb8 19. Bd2 b6 20. Kh1 Ne3 21. Qe2 Qa2 22. Bxe3 Nxd4 23. Qd3 Nc2 24. Ng5 h6 25. Qh7+ Kf8 26. Qh8# 1-0",
+      "timestamp": "2025-12-13T21:33:54.700797"
+    },
+    {
+      "white_network": "sfnnv9",
+      "black_network": "sfnnvkan_early_3072_15_32",
+      "result": "1/2-1/2",
+      "pgn": "[Event \"?\"]\n[Site \"?\"]\n[Date \"????.??.??\"]\n[Round \"?\"]\n[White \"sfnnv9\"]\n[Black \"sfnnvkan_early_3072_15_32\"]\n[Result \"1/2-1/2\"]\n\n1. e4 c6 2. d4 d5 3. e5 Bf5 4. Nf3 e6 5. Be2 Nd7 6. O-O Ne7 7. c3 h6 8. Nbd2 Qc7 9. Re1 O-O-O 10. a4 g5 11. a5 f6 12. exf6 Ng6 13. a6 Qxh2+ 14. Kf1 Qxg2+ 15. Kxg2 Nf4+ 16. Kh2 Kc7 17. Nh4 Nxe2 18. Qxe2 Bd6+ 19. Kg2 Bh3+ 20. Kh1 Bg2+ 21. Kxg2 gxh4 22. Qd3 Rhg8+ 23. Kh3 Rg3+ 24. Kxh4 Rh3+ 25. Kxh3 Rg8 26. Qb5 Rg3+ 27. Kh4 Rh3+ 28. Kxh3 cxb5 29. c4 dxc4 30. Nb3 Nxf6 31. Re2 bxa6 32. Ra4 Kb7 33. Nc5+ Kb8 34. Nxa6+ Kb7 35. Nc5+ Kb8 36. Nd7+ Nxd7 37. Ra6 Bb4 38. Bf4+ Kb7 39. Rxa7+ Kxa7 40. Bxh6 Nb6 41. Bd2 c3 42. Bh6 Bd6 43. Rxe6 c2 44. Rxd6 Nc4 45. Rd7+ Kb6 46. Bc1 Nxb2 47. Rd8 b4 48. Rc8 b3 49. Rb8+ Kc6 50. Rxb3 Nd1 51. f4 Kd5 52. f5 Kc4 53. Rf3 Kxd4 54. f6 Ke5 55. f7 Ke4 1/2-1/2",
+      "timestamp": "2025-12-13T21:34:34.339532"
+    },
+    {
+      "white_network": "sfnnvkan_early_3072_15_32",
+      "black_network": "sfnnv9",
+      "result": "1/2-1/2",
+      "pgn": "[Event \"?\"]\n[Site \"?\"]\n[Date \"????.??.??\"]\n[Round \"?\"]\n[White \"sfnnvkan_early_3072_15_32\"]\n[Black \"sfnnv9\"]\n[Result \"1/2-1/2\"]\n\n1. d4 Nf6 2. Nf3 d5 3. c4 e6 4. Nc3 c6 5. Bg5 Be7 6. e3 Nbd7 7. Qc2 O-O 8. Rd1 h6 9. Bh4 Nb6 10. b3 Nbd7 11. Bd3 b6 12. O-O Bb7 13. Nxd5 Kh8 14. Be4 Re8 15. Ne5 Rf8 16. Bf5 g5 17. Nxf7+ Kg7 18. Nc7 exf5 19. Bg3 Rg8 20. Nd5 Ne4 21. Nf6 Kg6 22. Nxe4 fxe4 23. Bf4 Kf6 24. Nxh6 Rg6 25. Bxg5+ Kg7 26. f3 Qh8 27. h4 Re6 28. Nf5+ Kf7 29. Ng3 Kg8 30. Nf5 Bf8 31. Rd2 exf3 32. Qe4 f2+ 33. Rdxf2 Rae8 34. Qxe6+ Rxe6 35. d5 Qf6 36. dxc6 Qf7 37. Nh6+ Rxh6 38. Bxh6 Ne5 39. Rf3 Ba8 40. c7 Ng4 41. Bf4 b5 42. Rc1 Ne5 43. Rg3+ Kh7 44. Rg7+ Kh8 45. Rg8+ Kh7 46. Rh8+ Kg6 47. Rh6+ Bxh6 48. h5+ Kf5 49. c8=Q+ Nd7 50. Qxd7+ Ke4 51. Qd4+ Kf5 52. Qe5+ Kg4 53. Qg5+ Bxg5 54. b4 Qxc4 55. e4 Qc5+ 1/2-1/2",
+      "timestamp": "2025-12-13T21:36:09.656914"
+    },
+    {
+      "white_network": "sfnnv9",
+      "black_network": "sfnnvkan_early_3072_15_32",
+      "result": "1-0",
+      "pgn": "[Event \"?\"]\n[Site \"?\"]\n[Date \"????.??.??\"]\n[Round \"?\"]\n[White \"sfnnv9\"]\n[Black \"sfnnvkan_early_3072_15_32\"]\n[Result \"1-0\"]\n\n1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6 6. Be3 e5 7. Nb3 Be6 8. f3 h5 9. Qd2 Nbd7 10. Nd5 Bxd5 11. exd5 g6 12. Be2 Bg7 13. Na5 Qc7 14. Bg5 Nh7 15. Bh4 Bh6 16. Qxh6 Qc5 17. Qf8+ Ndxf8 18. Bb5+ Qc6 19. Nxc6 axb5 20. Na7 f5 21. Nxb5 Kd7 22. a3 Rg8 23. Nxd6 Nf6 24. g4 fxg4 25. Nf7 Ke7 26. Nh6 Ke8 27. Nf7 gxf3 28. Nd6+ Ke7 29. Ne4 f2+ 30. Kxf2 g5 31. Bxg5 Kf7 32. Nd6+ Ke7 33. Nxb7 Kd7 34. Nc5+ Kd6 35. Ne4+ Kc7 36. Bd2 Ne6 37. Bc3 Rg5 38. Bxe5+ Rxe5 39. Nxf6 Rf5+ 40. Kg1 Rf1+ 41. Kg2 Nf4+ 42. Kg3 Rxa3+ 43. Kh4 Kb7 44. Ne4 Rg1 45. bxa3 Ng2+ 46. Kh3 Nf4+ 47. Kh4 Ng6+ 48. Kh3 Rg3+ 49. hxg3 Kc7 50. Rhf1 Ne5 51. a4 Ng4 52. a5 Ne3 53. Rf3 Nxd5 54. c4 Nb4 55. Rf5 Nc2 1-0",
+      "timestamp": "2025-12-13T21:37:09.194113"
+    },
+    {
+      "white_network": "sfnnvkan_early_3072_15_32",
+      "black_network": "sfnnv9",
+      "result": "1/2-1/2",
+      "pgn": "[Event \"?\"]\n[Site \"?\"]\n[Date \"????.??.??\"]\n[Round \"?\"]\n[White \"sfnnvkan_early_3072_15_32\"]\n[Black \"sfnnv9\"]\n[Result \"1/2-1/2\"]\n\n1. d4 Nf6 2. Nf3 d5 3. c4 e6 4. Nc3 c6 5. Bg5 Be7 6. e3 h6 7. Bh4 O-O 8. Rc1 Nbd7 9. Bd3 g5 10. Bg3 Nh5 11. Qd2 Bb4 12. Rd1 g4 13. Qc2 Ndf6 14. Rg1 Qd6 15. Qb3 Kg7 16. Qa4 b5 17. Qc2 Bd7 18. cxb5 cxb5 19. Nd2 Qc6 20. Be5 Bd6 21. Nxb5 a6 22. Bxd6 Qxd6 23. Nc7 Bc6 24. Nb5 g3 25. Nb1 gxf2+ 26. Qxf2 Ne8 27. g4 Qg3 28. N5c3 Qxf2+ 29. Kxf2 Nf4 30. Ke1 Ne2 31. a3 Rb8 32. Rf1 Ng3 33. b4 Bb5 34. Rf3 Nh1 35. Rf2 Ba4 36. Rxf7+ Kxf7 37. g5 Rb5 38. Rd2 Bd1 39. gxh6 Rc5 40. Ra2 Be2 41. h7 Rh8 42. Be4 Bh5 43. a4 Ke7 44. Bg2 Rxh7 45. Ne2 Bg6 46. e4 Bf5 47. exd5 Be4 48. b5 Rc1+ 49. Nxc1 Nf2 50. d6+ Kxd6 51. Nc3 Nd3+ 52. Kd1 Nb2+ 53. Kd2 Nc4+ 54. Kd1 Bc2+ 55. Kxc2 Na3+ 1/2-1/2",
+      "timestamp": "2025-12-13T21:39:05.604735"
+    },
+    {
+      "white_network": "sfnnv9",
+      "black_network": "sfnnvkan_early_3072_15_32",
+      "result": "1/2-1/2",
+      "pgn": "[Event \"?\"]\n[Site \"?\"]\n[Date \"????.??.??\"]\n[Round \"?\"]\n[White \"sfnnv9\"]\n[Black \"sfnnvkan_early_3072_15_32\"]\n[Result \"1/2-1/2\"]\n\n1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6 6. Be3 e5 7. Nb3 Be6 8. f3 h5 9. Qd2 Nbd7 10. Nd5 Bxd5 11. exd5 g6 12. Be2 Bg7 13. Na5 Qc7 14. Bg5 Nh7 15. Bh4 Bh6 16. Qxh6 Qc5 17. Qf8+ Ndxf8 18. Bb5+ Qc6 19. Nxc6 axb5 20. Na7 Rg8 21. Nxb5 Kd7 22. a3 Ra4 23. Nxd6 Re4+ 24. Kd2 Re2+ 25. Kd3 Re3+ 26. Kc4 Rc3+ 27. Kb5 Rc5+ 28. Kb6 Rb5+ 29. Ka7 Rb3 30. a4 Ra3 31. Rae1 Kc7 32. Nb5+ Kd7 33. Nd6 e4 34. Kb6 Rb3+ 35. Kc5 Rb5+ 36. Kd4 Rxd5+ 37. Kc3 Rd3+ 38. Kb4 Rd5 39. Nc4 Rb5+ 40. Kc3 Ne6 41. Rd1+ Kc7 42. Bg3+ Kc8 43. Nd6+ Kd8 44. Nxb5+ Ke7 45. Bd6+ Kf6 46. Be7+ Kxe7 47. Rd3 Rc8+ 48. Nc7 Nf4 49. fxe4 Ne2+ 50. Kc4 b5+ 51. axb5 Nf4 52. Kb4 Rxc7 53. Rd7+ Ke6 54. Rd6+ Ke5 55. Rd5+ Kxe4 1/2-1/2",
+      "timestamp": "2025-12-13T21:39:45.419180"
+    },
+    {
+      "white_network": "sfnnvkan_early_3072_15_32",
+      "black_network": "sfnnv9",
+      "result": "1/2-1/2",
+      "pgn": "[Event \"?\"]\n[Site \"?\"]\n[Date \"????.??.??\"]\n[Round \"?\"]\n[White \"sfnnvkan_early_3072_15_32\"]\n[Black \"sfnnv9\"]\n[Result \"1/2-1/2\"]\n\n1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6 6. Be3 e5 7. Nb3 Be6 8. f3 h5 9. Qd2 Nbd7 10. Nd5 Bxd5 11. exd5 g6 12. Be2 Bg7 13. a4 Ne4 14. Qa5 Ng3 15. hxg3 Qxa5+ 16. Nxa5 b6 17. Rxh5 gxh5 18. Nc4 Bf8 19. g4 b5 20. Na3 b4 21. Nc4 Nf6 22. g5 Nd7 23. Nb6 Ra7 24. a5 h4 25. Bf1 Ra8 26. Bf2 Rh6 27. Bg1 Be7 28. O-O-O Nc5 29. Re1 Nd3+ 30. Kd2 Rh7 31. b3 Rd8 32. Rxe5 Nc5 33. Re2 Ne4+ 34. Kc1 h3 35. gxh3 Rxh3 36. f4 Rh1 37. Bg2 Nc3 38. Bf3 Kf8 39. g6 f6 40. f5 Kg8 41. Re6 Rxg1+ 42. Kd2 Rd1+ 43. Ke3 Rd2 44. Rxe7 Re2+ 45. Kf4 Re5 46. Rxe5 fxe5+ 47. Kg3 e4 48. Kf4 Nb5 49. Nc8 Kg7 50. f6+ Kh6 51. Kf5 Re8 52. Bg2 Re5+ 53. Kf4 Re8 54. f7 Rf8 55. Kf5 e3 1/2-1/2",
+      "timestamp": "2025-12-13T21:40:38.604545"
+    },
+    {
+      "white_network": "sfnnv9",
+      "black_network": "sfnnvkan_early_3072_15_32",
+      "result": "1-0",
+      "pgn": "[Event \"?\"]\n[Site \"?\"]\n[Date \"????.??.??\"]\n[Round \"?\"]\n[White \"sfnnv9\"]\n[Black \"sfnnvkan_early_3072_15_32\"]\n[Result \"1-0\"]\n\n1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6 6. Be3 e5 7. Nb3 Be6 8. f3 h5 9. Qd2 Nbd7 10. Nd5 Bxd5 11. exd5 g6 12. Be2 Bg7 13. Na5 Qc7 14. Bg5 Nh7 15. Bh4 Bh6 16. Qxh6 Qc5 17. Qf8+ Ndxf8 18. Bb5+ Qc6 19. Nxc6 axb5 20. Na7 Rg8 21. Nxb5 Kd7 22. Nxd6 Ra6 23. b4 Ra4 24. Nxf7 Kc7 25. d6+ Kc8 26. d7+ Nxd7 27. Nd6+ Kc7 28. Nb5+ Kc6 29. Na3 Rc8 30. Bg3 Kb6 31. Bf2+ Kc6 32. b5+ Kd6 33. O-O-O+ Ke6 34. Nc4 Ra6 35. f4 exf4 36. Rhe1+ Kf5 37. Rd5+ Kf6 38. Bd4+ Ne5 39. Bxe5+ Ke6 40. Rd6+ Rxd6 41. Bxd6+ Kd5 42. Nb6+ Kxd6 43. Nxc8+ Kc5 44. a4 Ng5 45. Re7 h4 46. Rxb7 Ne4 47. Rf7 Nc3 48. Kd2 Nxa4 49. Rxf4 h3 50. gxh3 Kxb5 51. Rg4 g5 52. Ne7 Nc5 53. c3 Na6 54. Rd4 Nc5 55. Kc2 Ne6 1-0",
+      "timestamp": "2025-12-13T21:41:09.818162"
+    },
+    {
+      "white_network": "sfnnvkan_early_3072_15_32",
+      "black_network": "sfnnv9",
+      "result": "1-0",
+      "pgn": "[Event \"?\"]\n[Site \"?\"]\n[Date \"????.??.??\"]\n[Round \"?\"]\n[White \"sfnnvkan_early_3072_15_32\"]\n[Black \"sfnnv9\"]\n[Result \"1-0\"]\n\n1. d4 Nf6 2. Nf3 d5 3. c4 e6 4. Nc3 c6 5. Bg5 Be7 6. e3 Nbd7 7. Qc2 O-O 8. Rc1 Re8 9. Bd3 h6 10. Bh4 dxc4 11. Bxc4 b5 12. Bd3 Bb7 13. Bxb5 Ng4 14. Bf6 Ba6 15. Bxc6 Bb4 16. Qd2 g6 17. Ne2 Bxd2+ 18. Nxd2 Nxh2 19. Be7 Nf3+ 20. Bxf3 Bd3 21. Bd6 Qb8 22. Bc7 g5 23. b3 Nc5 24. g3 Kf8 25. dxc5 a5 26. Bd6+ Kg7 27. Be5+ f6 28. Ne4 Qb4+ 29. N2c3 Qxc3+ 30. Nd2 Kf8 31. Bd6+ Kf7 32. Bf8 Qxd2+ 33. Kxd2 Be4 34. Bh5+ Kxf8 35. Bf3 h5 36. Bxh5 Red8+ 37. Kc3 f5 38. Bf3 Rd3+ 39. Kb2 Rxb3+ 40. Kxb3 a4+ 41. Kb2 a3+ 42. Ka1 Bxf3 43. Rh8+ Ke7 44. Rxa8 Bxa8 45. c6 e5 46. c7 Bb7 47. c8=B Bxc8 48. Rxc8 Ke6 49. Kb1 e4 50. Rc3 Kf7 51. Rxa3 g4 52. Kb2 Kf8 53. Ra5 Ke7 54. Rxf5 Kd6 55. Kc3 Kc7 1-0",
+      "timestamp": "2025-12-13T21:42:19.518001"
+    },
+    {
+      "white_network": "sfnnv9",
+      "black_network": "sfnnvkan_early_3072_15_32",
+      "result": "0-1",
+      "pgn": "[Event \"?\"]\n[Site \"?\"]\n[Date \"????.??.??\"]\n[Round \"?\"]\n[White \"sfnnv9\"]\n[Black \"sfnnvkan_early_3072_15_32\"]\n[Result \"0-1\"]\n\n1. d4 Nf6 2. Nf3 d5 3. c4 e6 4. Nc3 c6 5. Bg5 Be7 6. e3 Nbd7 7. Bd3 h6 8. Bxf6 Nxf6 9. O-O O-O 10. Qc2 dxc4 11. Bxc4 Qc7 12. Ne4 b6 13. Be2 Qxh2+ 14. Kxh2 Bd6+ 15. Kh3 e5+ 16. Kh4 g5+ 17. Nexg5 hxg5+ 18. Kxg5 Ne8 19. Qh7+ Kxh7 20. Kh5 Bg4+ 21. Kh4 Be7+ 22. Kg3 b5 23. Kh2 Bh4 24. g3 Bh3 25. Bd3+ Kh8 26. Kg1 Bg2 27. Nxh4 Bf3 28. Nf5 Rg8 29. Kh2 Be4 30. Nh6 Rf8 31. dxe5 f6 32. e6 Kg7 33. e7 Rh8 34. Be2 Rxh6+ 35. Bh5 Rxh5+ 36. Kg1 Rh1# 0-1",
+      "timestamp": "2025-12-13T21:43:16.562104"
+    }
+  ],
+  "last_updated": "2025-12-13T21:43:37.439023"
+}
