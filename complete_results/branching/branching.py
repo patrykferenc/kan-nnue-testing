@@ -52,9 +52,9 @@ if not stock_df.empty:
             marker='s', linewidth=2, markersize=4, linestyle='--',
             color='black', label='Stockfish 17.1', zorder=10)
 
-plt.title("Branching Factor w zależności od głębokości wyszukiwania")
-plt.xlabel("Głębokość")
-plt.ylabel("BF")
+plt.title('Współczynnik rozgałęzienia $B_f$  w zależności od głębokości wyszukiwania $d$')
+plt.xlabel('$d$')
+plt.ylabel('$B_f$')
 plt.legend(title="Model", loc="lower left")
 plt.tight_layout()
 plt.savefig('branching_plot.svg', format='svg', bbox_inches='tight', dpi=300)
